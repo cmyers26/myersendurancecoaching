@@ -82,24 +82,24 @@ const planDetails = {
 };
 
 function Checkout() {
-  const { planName } = useParams();
+  const { plan: planParam } = useParams();
   const navigate = useNavigate();
   const { selectedPlan, setSelectedPlan, setIsAuthenticated } = useAppContext();
 
-  // Use planName from URL params if selectedPlan is not set
-  const currentPlan = selectedPlan || planName;
+  // Use plan from URL params if selectedPlan is not set
+  const currentPlan = selectedPlan || planParam;
   const plan = planDetails[currentPlan];
 
   useEffect(() => {
-    // If planName is in URL but selectedPlan is not set, set it in context
-    if (planName && !selectedPlan && planDetails[planName]) {
-      setSelectedPlan(planName);
+    // If plan is in URL but selectedPlan is not set, set it in context
+    if (planParam && !selectedPlan && planDetails[planParam]) {
+      setSelectedPlan(planParam);
     }
-    // If no plan is selected and no planName in URL, redirect to pricing
+    // If no plan is selected and no plan in URL, redirect to pricing
     if (!currentPlan || !plan) {
       navigate('/pricing');
     }
-  }, [currentPlan, plan, navigate, planName, selectedPlan, setSelectedPlan]);
+  }, [currentPlan, plan, navigate, planParam, selectedPlan, setSelectedPlan]);
 
   const handleCompletePurchase = () => {
     setIsAuthenticated(true);

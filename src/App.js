@@ -21,14 +21,9 @@ function App() {
         <AppLayout>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/coaching" element={<CoachingAndPricing />} />
-            <Route path="/how-it-works" element={<HowItWorks />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/intake" element={<IntakeForm />} />
-            <Route path="/get-started" element={<GetStarted />} />
             <Route path="/pricing" element={<CoachingAndPricing />} />
-            <Route path="/checkout/:planName" element={<Checkout />} />
+            <Route path="/get-started" element={<GetStarted />} />
+            <Route path="/checkout/:plan" element={<Checkout />} />
             <Route path="/onboarding/intake" element={<OnboardingIntake />} />
             <Route
               path="/dashboard"
@@ -38,6 +33,12 @@ function App() {
                 </RequireIntake>
               }
             />
+            {/* Additional routes */}
+            <Route path="/coaching" element={<CoachingAndPricing />} />
+            <Route path="/how-it-works" element={<HowItWorks />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/intake" element={<IntakeForm />} />
           </Routes>
         </AppLayout>
       </Router>

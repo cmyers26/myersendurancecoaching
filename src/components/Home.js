@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Container,
   Typography,
@@ -11,6 +12,8 @@ import {
 } from '@mui/material';
 
 function Home() {
+  const navigate = useNavigate();
+
   return (
     <>
       {/* Hero Section */}
@@ -50,13 +53,14 @@ function Home() {
               variant="contained"
               color="primary"
               size="large"
+              onClick={() => navigate('/get-started')}
               sx={{
                 px: 4,
                 py: 1.5,
                 fontSize: '1.1rem',
               }}
             >
-              Get Started
+              Get Started With Coaching
             </Button>
           </Box>
         </Container>

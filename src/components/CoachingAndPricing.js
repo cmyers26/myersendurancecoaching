@@ -1,4 +1,6 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAppContext } from '../context/AppContext';
 import {
   Container,
   Typography,
@@ -17,6 +19,13 @@ import {
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 function CoachingAndPricing() {
+  const navigate = useNavigate();
+  const { setSelectedPlan } = useAppContext();
+
+  const handlePlanSelect = (planName) => {
+    setSelectedPlan(planName);
+    navigate(`/checkout/${planName}`);
+  };
   return (
     <>
       {/* Page Header */}
@@ -125,6 +134,7 @@ function CoachingAndPricing() {
                     variant="outlined"
                     color="primary"
                     fullWidth
+                    onClick={() => handlePlanSelect('pdf-5k')}
                     sx={{ mt: 3 }}
                   >
                     Purchase Plan
@@ -179,6 +189,7 @@ function CoachingAndPricing() {
                     variant="outlined"
                     color="primary"
                     fullWidth
+                    onClick={() => handlePlanSelect('pdf-half')}
                     sx={{ mt: 3 }}
                   >
                     Purchase Plan
@@ -341,6 +352,7 @@ function CoachingAndPricing() {
                     variant="contained"
                     color="primary"
                     fullWidth
+                    onClick={() => handlePlanSelect('level1')}
                     sx={{ mt: 3 }}
                   >
                     Get Started
@@ -436,6 +448,7 @@ function CoachingAndPricing() {
                     variant="contained"
                     color="primary"
                     fullWidth
+                    onClick={() => handlePlanSelect('level2')}
                     sx={{ mt: 3 }}
                   >
                     Get Started
@@ -554,6 +567,7 @@ function CoachingAndPricing() {
                     color="primary"
                     fullWidth
                     size="large"
+                    onClick={() => handlePlanSelect('level3')}
                     sx={{ mt: 3, py: 1.5 }}
                   >
                     Get Started

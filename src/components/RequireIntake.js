@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
-import { Alert, Box, Button } from '@mui/material';
+import { Alert, Button } from '@mui/material';
 import WarningIcon from '@mui/icons-material/Warning';
 
 function RequireIntake({ children }) {

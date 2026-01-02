@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { supabase } from '../lib/supabase';
 import {
   Container,
   Typography,
@@ -7,6 +8,7 @@ import {
   TextField,
   Paper,
   Alert,
+  CircularProgress,
 } from '@mui/material';
 
 function Contact() {
@@ -17,6 +19,8 @@ function Contact() {
   });
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -52,15 +56,47 @@ function Contact() {
     return isValid;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      console.log('Contact Form Submitted:', formData);
+    setSubmitError('');
+    setSubmitted(false);
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      // Insert contact message into Supabase
+      const { error } = await supabase.from('contact_messages').insert([
+        {
+          name: formData.name.trim(),
+          email: formData.email.trim().toLowerCase(),
+          message: formData.message.trim(),
+          created_at: new Date().toISOString(),
+        },
+      ]);
+
+      if (error) {
+        throw new Error(`Failed to send message: ${error.message}`);
+      }
+
+      // Show success message
       setSubmitted(true);
-      // Reset form
+      
+      // Clear form
       setFormData({ name: '', email: '', message: '' });
+      
       // Clear success message after 5 seconds
       setTimeout(() => setSubmitted(false), 5000);
+    } catch (error) {
+      console.error('Error submitting contact form:', error);
+      setSubmitError(
+        error.message || 'An error occurred while sending your message. Please try again.'
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -120,6 +156,11 @@ function Contact() {
                 Thank you for your message! We'll get back to you soon.
               </Alert>
             )}
+            {submitError && (
+              <Alert severity="error" sx={{ mb: 3 }}>
+                {submitError}
+              </Alert>
+            )}
 
             <form onSubmit={handleSubmit}>
               <Box sx={{ mb: 3 }}>
@@ -164,13 +205,19 @@ function Contact() {
                   variant="contained"
                   color="primary"
                   size="large"
+                  disabled={isSubmitting}
                   sx={{
                     px: 4,
                     py: 1.5,
                     fontSize: '1.1rem',
                   }}
+                  startIcon={
+                    isSubmitting ? (
+                      <CircularProgress size={20} color="inherit" />
+                    ) : null
+                  }
                 >
-                  Send Message
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
                 </Button>
               </Box>
             </form>

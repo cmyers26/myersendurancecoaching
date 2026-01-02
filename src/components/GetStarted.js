@@ -14,7 +14,6 @@ import {
   Radio,
   MenuItem,
   Paper,
-  Alert,
 } from '@mui/material';
 
 function GetStarted() {

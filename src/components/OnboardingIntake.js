@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
+import { supabase } from '../lib/supabase';
 import {
   Container,
   Typography,
@@ -17,12 +18,15 @@ import {
   Paper,
   Grid,
   Divider,
+  Alert,
+  CircularProgress,
 } from '@mui/material';
 
 function OnboardingIntake() {
   const navigate = useNavigate();
   const { setIntakeComplete } = useAppContext();
   const [formData, setFormData] = useState({
+    email: '',
     // Runner Background
     experienceLevel: '',
     yearsRunning: '',
@@ -46,6 +50,9 @@ function OnboardingIntake() {
     medicalConditions: '',
   });
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [submitSuccess, setSubmitSuccess] = useState(false);
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -67,6 +74,15 @@ function OnboardingIntake() {
   const validateForm = () => {
     const newErrors = {};
     let isValid = true;
+
+    // Email validation
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required';
+      isValid = false;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email address';
+      isValid = false;
+    }
 
     // Runner Background validation
     if (!formData.experienceLevel) {
@@ -104,11 +120,154 @@ function OnboardingIntake() {
     return isValid;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
+    setSubmitError('');
+    setSubmitSuccess(false);
+
+    if (!validateForm()) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const email = formData.email.trim().toLowerCase();
+      let userId;
+
+      // Step 1: Check if user exists by email
+      const { data: existingUsers, error: checkError } = await supabase
+        .from('users')
+        .select('id')
+        .eq('email', email)
+        .limit(1);
+
+      if (checkError) {
+        console.error('Check user error:', checkError);
+        // If it's an RLS error on SELECT, we'll handle it
+        if (
+          checkError.message.includes('row-level security') ||
+          checkError.message.includes('RLS') ||
+          checkError.code === '42501'
+        ) {
+          throw new Error(
+            `RLS Policy Error: Missing SELECT policy on 'users' table. Please create a SELECT policy. Error: ${checkError.message}`
+          );
+        }
+        throw new Error(`Failed to check user: ${checkError.message}`);
+      }
+
+      // Step 2: If user doesn't exist, create new user
+      if (!existingUsers || existingUsers.length === 0) {
+        const { data: newUser, error: insertUserError } = await supabase
+          .from('users')
+          .insert([
+            {
+              email: email,
+              created_at: new Date().toISOString(),
+            },
+          ])
+          .select('id')
+          .single();
+
+        if (insertUserError) {
+          // Log the full error for debugging
+          console.error('User creation error:', insertUserError);
+          
+          // Check if it's an RLS error
+          if (
+            insertUserError.message.includes('row-level security') ||
+            insertUserError.message.includes('RLS') ||
+            insertUserError.code === '42501'
+          ) {
+            throw new Error(
+              `RLS Policy Error: ${insertUserError.message}. Please verify that an INSERT policy exists for the 'users' table and that it allows public inserts. Error code: ${insertUserError.code || 'N/A'}`
+            );
+          }
+          throw new Error(`Failed to create user: ${insertUserError.message} (Code: ${insertUserError.code || 'N/A'})`);
+        }
+
+        userId = newUser.id;
+      } else {
+        userId = existingUsers[0].id;
+      }
+
+      // Step 3: Insert intake data linked to user_id
+      // Map form fields to database schema (which uses consolidated columns)
+      const intakeData = {
+        user_id: userId,
+        // Experience column - combine experience level and years
+        experience: JSON.stringify({
+          level: formData.experienceLevel,
+          years_running: formData.yearsRunning
+            ? parseInt(formData.yearsRunning)
+            : null,
+          longest_distance: formData.longestDistance || null,
+          typical_pace: formData.typicalPace || null,
+        }),
+        // Weekly mileage column
+        weekly_mileage: formData.currentWeeklyMileage
+          ? parseInt(formData.currentWeeklyMileage)
+          : null,
+        // Goals column - combine all goal-related fields
+        goals: JSON.stringify({
+          primary_goal: formData.primaryGoal,
+          target_race: formData.targetRace || null,
+          target_date: formData.targetDate || null,
+          time_goal: formData.timeGoal || null,
+        }),
+        // Availability column - combine all availability fields
+        availability: JSON.stringify({
+          days_per_week: formData.daysPerWeek,
+          preferred_days: formData.preferredDays,
+          preferred_time: formData.preferredTime,
+          weekly_hours: formData.weeklyHours
+            ? parseFloat(formData.weeklyHours)
+            : null,
+        }),
+        // Injury history column - combine injury-related fields
+        injury_history: JSON.stringify({
+          has_injuries: formData.hasInjuries === 'yes',
+          injury_details: formData.injuryDetails || null,
+          medical_conditions: formData.medicalConditions || null,
+        }),
+        // Current issues column
+        current_issues: formData.currentIssues || null,
+        created_at: new Date().toISOString(),
+      };
+
+      const { error: intakeError } = await supabase
+        .from('intakes')
+        .insert([intakeData]);
+
+      if (intakeError) {
+        console.error('Intake insert error:', intakeError);
+        // Check if it's a missing column error
+        if (intakeError.message.includes('column') && intakeError.message.includes('schema cache')) {
+          throw new Error(
+            `Database schema error: ${intakeError.message}. Please check that all required columns exist in the 'intakes' table.`
+          );
+        }
+        throw new Error(`Failed to save intake: ${intakeError.message}`);
+      }
+
+      // Step 4: Set intake_complete = true in context
       setIntakeComplete(true);
-      navigate('/dashboard');
+
+      // Step 5: Show success message
+      setSubmitSuccess(true);
+
+      // Navigate to dashboard after a brief delay
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 2000);
+    } catch (error) {
+      console.error('Error submitting intake:', error);
+      setSubmitError(
+        error.message || 'An error occurred while submitting your intake. Please try again.'
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -154,7 +313,33 @@ function OnboardingIntake() {
       >
         <Container maxWidth="md">
           <Paper elevation={2} sx={{ p: { xs: 3, md: 4 } }}>
+            {submitSuccess && (
+              <Alert severity="success" sx={{ mb: 3 }}>
+                Your intake form has been submitted successfully! Redirecting to
+                dashboard...
+              </Alert>
+            )}
+            {submitError && (
+              <Alert severity="error" sx={{ mb: 3 }}>
+                {submitError}
+              </Alert>
+            )}
             <form onSubmit={handleSubmit}>
+              {/* Email Field */}
+              <TextField
+                fullWidth
+                label="Email"
+                type="email"
+                required
+                value={formData.email}
+                onChange={(e) => handleChange('email', e.target.value)}
+                error={!!errors.email}
+                helperText={errors.email}
+                sx={{ mb: 4 }}
+              />
+
+              <Divider sx={{ my: 4 }} />
+
               {/* Runner Background Section */}
               <Typography
                 variant="h4"
@@ -549,13 +734,19 @@ function OnboardingIntake() {
                   variant="contained"
                   color="primary"
                   size="large"
+                  disabled={isSubmitting}
                   sx={{
                     px: 4,
                     py: 1.5,
                     fontSize: '1.1rem',
                   }}
+                  startIcon={
+                    isSubmitting ? (
+                      <CircularProgress size={20} color="inherit" />
+                    ) : null
+                  }
                 >
-                  Submit Intake
+                  {isSubmitting ? 'Submitting...' : 'Submit Intake'}
                 </Button>
               </Box>
             </form>

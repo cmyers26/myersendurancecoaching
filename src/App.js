@@ -1,24 +1,30 @@
-import logo from './logo.svg';
+import { Container, Typography, Button, Box } from '@mui/material';
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container maxWidth="lg">
+      <Box
+        sx={{
+          my: 4,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          minHeight: '50vh',
+        }}
+      >
+        <Typography variant="h2" component="h1" gutterBottom>
+          Myers Endurance Coaching
+        </Typography>
+        <Typography variant="h5" component="h2" gutterBottom>
+          Welcome to your new website
+        </Typography>
+        <Button variant="contained" color="primary" sx={{ mt: 3 }}>
+          Get Started
+        </Button>
+      </Box>
+    </Container>
   );
 }
 

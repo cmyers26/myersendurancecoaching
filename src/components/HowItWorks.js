@@ -193,33 +193,81 @@ function HowItWorks() {
               adjust? No problem. We adapt your training in real-time to keep
               you on track without adding stress to your already full plate.
             </Typography>
-            <Grid container spacing={3} sx={{ mt: 2 }}>
+            <Grid container spacing={3} sx={{ mt: 2 }} justifyContent="center">
               <Grid item xs={12} sm={4}>
-                <Typography variant="h6" color="primary.main" gutterBottom>
-                  Flexible Timing
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Train when it works for you—early morning, lunch break, or
-                  evening. We adapt to your schedule.
-                </Typography>
+                <Paper
+                  elevation={2}
+                  sx={{
+                    p: 3,
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    textAlign: 'center',
+                    transition: 'transform 0.2s, box-shadow 0.2s',
+                    '&:hover': {
+                      transform: 'translateY(-4px)',
+                      boxShadow: 4,
+                    },
+                  }}
+                >
+                  <Typography variant="h6" color="primary.main" gutterBottom>
+                    Flexible Timing
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Train when it works for you—early morning, lunch break, or
+                    evening. We adapt to your schedule.
+                  </Typography>
+                </Paper>
               </Grid>
               <Grid item xs={12} sm={4}>
-                <Typography variant="h6" color="primary.main" gutterBottom>
-                  Easy Adjustments
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Life changes? We quickly adjust your plan to keep you on track
-                  without added stress.
-                </Typography>
+                <Paper
+                  elevation={2}
+                  sx={{
+                    p: 3,
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    textAlign: 'center',
+                    transition: 'transform 0.2s, box-shadow 0.2s',
+                    '&:hover': {
+                      transform: 'translateY(-4px)',
+                      boxShadow: 4,
+                    },
+                  }}
+                >
+                  <Typography variant="h6" color="primary.main" gutterBottom>
+                    Easy Adjustments
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Life changes? We quickly adjust your plan to keep you on track
+                    without added stress.
+                  </Typography>
+                </Paper>
               </Grid>
               <Grid item xs={12} sm={4}>
-                <Typography variant="h6" color="primary.main" gutterBottom>
-                  Sustainable Approach
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  Training that fits your life, not training that takes over your
-                  life. Balance is key.
-                </Typography>
+                <Paper
+                  elevation={2}
+                  sx={{
+                    p: 3,
+                    height: '100%',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    textAlign: 'center',
+                    transition: 'transform 0.2s, box-shadow 0.2s',
+                    '&:hover': {
+                      transform: 'translateY(-4px)',
+                      boxShadow: 4,
+                    },
+                  }}
+                >
+                  <Typography variant="h6" color="primary.main" gutterBottom>
+                    Sustainable Approach
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Training that fits your life, not training that takes over your
+                    life. Balance is key.
+                  </Typography>
+                </Paper>
               </Grid>
             </Grid>
           </Box>

@@ -9,7 +9,6 @@ import {
   Grid,
   Card,
   CardContent,
-  Paper,
   Chip,
   Divider,
   List,
@@ -273,7 +272,7 @@ function CoachingAndPricing() {
           >
             Personalized Coaching Tiers
           </Typography>
-          <Grid container spacing={4}>
+          <Grid container spacing={4} justifyContent="center">
             {/* Level 1 */}
             <Grid item xs={12} md={4}>
               <Card
@@ -605,155 +604,159 @@ function CoachingAndPricing() {
           >
             Enhance your coaching experience with specialized add-on services
           </Typography>
-          <Grid container spacing={4} justifyContent="center">
-            <Grid item xs={12} sm={6} md={5}>
-              <Paper
+          <Grid container spacing={4} justifyContent="center" flexWrap="nowrap">
+            <Grid item xs={12} sm={6} md={6}>
+              <Card
                 elevation={2}
                 sx={{
-                  p: 4,
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
+                  position: 'relative',
                 }}
               >
-                <Typography variant="h5" component="h3" gutterBottom>
-                  Strength Training Program
-                </Typography>
-                <Box sx={{ my: 2 }}>
-                  <Typography
-                    variant="h5"
-                    component="span"
-                    sx={{ fontWeight: 600 }}
-                  >
-                    $49
+                <CardContent sx={{ flexGrow: 1, p: 3 }}>
+                  <Typography variant="h5" component="h3" gutterBottom>
+                    Strength Training Program
                   </Typography>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    component="span"
-                    sx={{ ml: 1 }}
-                  >
-                    /month
+                  <Box sx={{ my: 2 }}>
+                    <Typography
+                      variant="h4"
+                      component="span"
+                      sx={{ fontWeight: 600 }}
+                    >
+                      $49
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      component="span"
+                      sx={{ ml: 1 }}
+                    >
+                      /month
+                    </Typography>
+                  </Box>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                    Comprehensive strength training program designed specifically
+                    for runners. Includes exercises, progressions, and form videos
+                    to improve power, prevent injury, and enhance running
+                    performance.
                   </Typography>
-                </Box>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                  Comprehensive strength training program designed specifically
-                  for runners. Includes exercises, progressions, and form videos
-                  to improve power, prevent injury, and enhance running
-                  performance.
-                </Typography>
-                <List dense>
-                  <ListItem disablePadding sx={{ py: 0.5 }}>
-                    <CheckCircleIcon
-                      sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
-                    />
-                    <ListItemText
-                      primary="Runner-specific exercises"
-                      primaryTypographyProps={{ variant: 'body2' }}
-                    />
-                  </ListItem>
-                  <ListItem disablePadding sx={{ py: 0.5 }}>
-                    <CheckCircleIcon
-                      sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
-                    />
-                    <ListItemText
-                      primary="2-3 sessions per week"
-                      primaryTypographyProps={{ variant: 'body2' }}
-                    />
-                  </ListItem>
-                  <ListItem disablePadding sx={{ py: 0.5 }}>
-                    <CheckCircleIcon
-                      sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
-                    />
-                    <ListItemText
-                      primary="Form videos & progressions"
-                      primaryTypographyProps={{ variant: 'body2' }}
-                    />
-                  </ListItem>
-                </List>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  fullWidth
-                  sx={{ mt: 3 }}
-                >
-                  Add Strength Training
-                </Button>
-              </Paper>
+                  <List dense>
+                    <ListItem disablePadding sx={{ py: 0.5 }}>
+                      <CheckCircleIcon
+                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
+                      />
+                      <ListItemText
+                        primary="Runner-specific exercises"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                    <ListItem disablePadding sx={{ py: 0.5 }}>
+                      <CheckCircleIcon
+                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
+                      />
+                      <ListItemText
+                        primary="2-3 sessions per week"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                    <ListItem disablePadding sx={{ py: 0.5 }}>
+                      <CheckCircleIcon
+                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
+                      />
+                      <ListItemText
+                        primary="Form videos & progressions"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                  </List>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    fullWidth
+                    sx={{ mt: 3 }}
+                  >
+                    Add Strength Training
+                  </Button>
+                </CardContent>
+              </Card>
             </Grid>
-            <Grid item xs={12} sm={6} md={5}>
-              <Paper
+            <Grid item xs={12} sm={6} md={6}>
+              <Card
                 elevation={2}
                 sx={{
-                  p: 4,
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
+                  position: 'relative',
                 }}
               >
-                <Typography variant="h5" component="h3" gutterBottom>
-                  Race Strategy Consultation
-                </Typography>
-                <Box sx={{ my: 2 }}>
-                  <Typography
-                    variant="h5"
-                    component="span"
-                    sx={{ fontWeight: 600 }}
-                  >
-                    $99
+                <CardContent sx={{ flexGrow: 1, p: 3 }}>
+                  <Typography variant="h5" component="h3" gutterBottom>
+                    Race Strategy Consultation
                   </Typography>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    component="span"
-                    sx={{ ml: 1 }}
-                  >
-                    /session
+                  <Box sx={{ my: 2 }}>
+                    <Typography
+                      variant="h4"
+                      component="span"
+                      sx={{ fontWeight: 600 }}
+                    >
+                      $99
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      component="span"
+                      sx={{ ml: 1 }}
+                    >
+                      /session
+                    </Typography>
+                  </Box>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                    One-on-one race strategy session to develop a personalized
+                    race plan. Includes pacing strategy, nutrition plan, mental
+                    preparation, and course-specific tactics for your target race.
                   </Typography>
-                </Box>
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                  One-on-one race strategy session to develop a personalized
-                  race plan. Includes pacing strategy, nutrition plan, mental
-                  preparation, and course-specific tactics for your target race.
-                </Typography>
-                <List dense>
-                  <ListItem disablePadding sx={{ py: 0.5 }}>
-                    <CheckCircleIcon
-                      sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
-                    />
-                    <ListItemText
-                      primary="90-minute strategy session"
-                      primaryTypographyProps={{ variant: 'body2' }}
-                    />
-                  </ListItem>
-                  <ListItem disablePadding sx={{ py: 0.5 }}>
-                    <CheckCircleIcon
-                      sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
-                    />
-                    <ListItemText
-                      primary="Personalized pacing plan"
-                      primaryTypographyProps={{ variant: 'body2' }}
-                    />
-                  </ListItem>
-                  <ListItem disablePadding sx={{ py: 0.5 }}>
-                    <CheckCircleIcon
-                      sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
-                    />
-                    <ListItemText
-                      primary="Written race strategy document"
-                      primaryTypographyProps={{ variant: 'body2' }}
-                    />
-                  </ListItem>
-                </List>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  fullWidth
-                  sx={{ mt: 3 }}
-                >
-                  Book Consultation
-                </Button>
-              </Paper>
+                  <List dense>
+                    <ListItem disablePadding sx={{ py: 0.5 }}>
+                      <CheckCircleIcon
+                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
+                      />
+                      <ListItemText
+                        primary="90-minute strategy session"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                    <ListItem disablePadding sx={{ py: 0.5 }}>
+                      <CheckCircleIcon
+                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
+                      />
+                      <ListItemText
+                        primary="Personalized pacing plan"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                    <ListItem disablePadding sx={{ py: 0.5 }}>
+                      <CheckCircleIcon
+                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
+                      />
+                      <ListItemText
+                        primary="Written race strategy document"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                  </List>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    fullWidth
+                    sx={{ mt: 3 }}
+                  >
+                    Book Consultation
+                  </Button>
+                </CardContent>
+              </Card>
             </Grid>
           </Grid>
         </Container>

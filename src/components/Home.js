@@ -84,7 +84,7 @@ function Home() {
           >
             Who This Coaching Is For
           </Typography>
-          <Grid container spacing={4}>
+          <Grid container spacing={4} sx={{ display: 'flex', justifyContent: 'center' }}>
             <Grid item xs={12} md={4}>
               <Card
                 elevation={2}
@@ -184,7 +184,7 @@ function Home() {
           >
             How It Works
           </Typography>
-          <Grid container spacing={4}>
+          <Grid container spacing={4} sx={{ display: 'flex', justifyContent: 'center' }}>
             <Grid item xs={12} sm={6} md={3}>
               <Paper
                 elevation={0}

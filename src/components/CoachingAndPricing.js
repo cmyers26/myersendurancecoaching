@@ -1,0 +1,752 @@
+import React from 'react';
+import {
+  Container,
+  Typography,
+  Button,
+  Box,
+  Grid,
+  Card,
+  CardContent,
+  Paper,
+  Chip,
+  Divider,
+  List,
+  ListItem,
+  ListItemText,
+} from '@mui/material';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+
+function CoachingAndPricing() {
+  return (
+    <>
+      {/* Page Header */}
+      <Box
+        sx={{
+          py: { xs: 4, md: 6 },
+          px: 2,
+          backgroundColor: 'background.default',
+        }}
+      >
+        <Container maxWidth="lg">
+          <Typography
+            variant="h2"
+            component="h1"
+            align="center"
+            gutterBottom
+            sx={{ mb: 2 }}
+          >
+            Coaching & Pricing
+          </Typography>
+          <Typography
+            variant="h6"
+            align="center"
+            color="text.secondary"
+            sx={{ maxWidth: '700px', mx: 'auto', fontWeight: 400 }}
+          >
+            Choose the coaching option that best fits your goals and commitment
+            level
+          </Typography>
+        </Container>
+      </Box>
+
+      {/* Downloadable Training Plans Section */}
+      <Box
+        sx={{
+          py: { xs: 6, md: 8 },
+          px: 2,
+          backgroundColor: 'background.paper',
+        }}
+      >
+        <Container maxWidth="lg">
+          <Typography
+            variant="h3"
+            component="h2"
+            align="center"
+            gutterBottom
+            sx={{ mb: 4 }}
+          >
+            Downloadable Training Plans
+          </Typography>
+          <Typography
+            variant="body1"
+            align="center"
+            color="text.secondary"
+            sx={{ mb: 4, maxWidth: '600px', mx: 'auto' }}
+          >
+            Self-paced training plans you can download and follow at your own
+            pace. Perfect for runners who prefer structure without ongoing
+            support.
+          </Typography>
+          <Grid container spacing={4} justifyContent="center">
+            <Grid item xs={12} sm={6} md={4}>
+              <Card
+                elevation={2}
+                sx={{
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  position: 'relative',
+                }}
+              >
+                <CardContent sx={{ flexGrow: 1, p: 3 }}>
+                  <Typography variant="h5" component="h3" gutterBottom>
+                    5K Training Plan
+                  </Typography>
+                  <Box sx={{ my: 2 }}>
+                    <Typography
+                      variant="h4"
+                      component="span"
+                      sx={{ fontWeight: 600 }}
+                    >
+                      $29
+                    </Typography>
+                  </Box>
+                  <List dense>
+                    <ListItem disablePadding>
+                      <ListItemText
+                        primary="12-week structured plan"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                    <ListItem disablePadding>
+                      <ListItemText
+                        primary="Beginner to intermediate"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                    <ListItem disablePadding>
+                      <ListItemText
+                        primary="PDF download"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                  </List>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    fullWidth
+                    sx={{ mt: 3 }}
+                  >
+                    Purchase Plan
+                  </Button>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <Card
+                elevation={2}
+                sx={{
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  position: 'relative',
+                }}
+              >
+                <CardContent sx={{ flexGrow: 1, p: 3 }}>
+                  <Typography variant="h5" component="h3" gutterBottom>
+                    Half Marathon Plan
+                  </Typography>
+                  <Box sx={{ my: 2 }}>
+                    <Typography
+                      variant="h4"
+                      component="span"
+                      sx={{ fontWeight: 600 }}
+                    >
+                      $49
+                    </Typography>
+                  </Box>
+                  <List dense>
+                    <ListItem disablePadding>
+                      <ListItemText
+                        primary="16-week structured plan"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                    <ListItem disablePadding>
+                      <ListItemText
+                        primary="Intermediate to advanced"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                    <ListItem disablePadding>
+                      <ListItemText
+                        primary="PDF download"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                  </List>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    fullWidth
+                    sx={{ mt: 3 }}
+                  >
+                    Purchase Plan
+                  </Button>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <Card
+                elevation={2}
+                sx={{
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  position: 'relative',
+                }}
+              >
+                <CardContent sx={{ flexGrow: 1, p: 3 }}>
+                  <Typography variant="h5" component="h3" gutterBottom>
+                    Marathon Plan
+                  </Typography>
+                  <Box sx={{ my: 2 }}>
+                    <Typography
+                      variant="h4"
+                      component="span"
+                      sx={{ fontWeight: 600 }}
+                    >
+                      $69
+                    </Typography>
+                  </Box>
+                  <List dense>
+                    <ListItem disablePadding>
+                      <ListItemText
+                        primary="20-week structured plan"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                    <ListItem disablePadding>
+                      <ListItemText
+                        primary="Intermediate to advanced"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                    <ListItem disablePadding>
+                      <ListItemText
+                        primary="PDF download"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                  </List>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    fullWidth
+                    sx={{ mt: 3 }}
+                  >
+                    Purchase Plan
+                  </Button>
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
+
+      {/* Coaching Tiers Section */}
+      <Box
+        sx={{
+          py: { xs: 6, md: 8 },
+          px: 2,
+          backgroundColor: 'background.default',
+        }}
+      >
+        <Container maxWidth="lg">
+          <Typography
+            variant="h3"
+            component="h2"
+            align="center"
+            gutterBottom
+            sx={{ mb: 4 }}
+          >
+            Personalized Coaching Tiers
+          </Typography>
+          <Grid container spacing={4}>
+            {/* Level 1 */}
+            <Grid item xs={12} md={4}>
+              <Card
+                elevation={2}
+                sx={{
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  transition: 'transform 0.2s, box-shadow 0.2s',
+                  '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: 4,
+                  },
+                }}
+              >
+                <CardContent sx={{ flexGrow: 1, p: 3 }}>
+                  <Typography variant="h5" component="h3" gutterBottom>
+                    Level 1
+                  </Typography>
+                  <Typography
+                    variant="subtitle1"
+                    color="text.secondary"
+                    gutterBottom
+                    sx={{ mb: 2 }}
+                  >
+                    Essential Coaching
+                  </Typography>
+                  <Box sx={{ my: 2 }}>
+                    <Typography
+                      variant="h4"
+                      component="span"
+                      sx={{ fontWeight: 600 }}
+                    >
+                      $99
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      component="span"
+                      sx={{ ml: 1 }}
+                    >
+                      /month
+                    </Typography>
+                  </Box>
+                  <Divider sx={{ my: 2 }} />
+                  <List dense>
+                    <ListItem disablePadding sx={{ py: 0.5 }}>
+                      <CheckCircleIcon
+                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
+                      />
+                      <ListItemText
+                        primary="Customized training plan"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                    <ListItem disablePadding sx={{ py: 0.5 }}>
+                      <CheckCircleIcon
+                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
+                      />
+                      <ListItemText
+                        primary="Monthly plan updates"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                    <ListItem disablePadding sx={{ py: 0.5 }}>
+                      <CheckCircleIcon
+                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
+                      />
+                      <ListItemText
+                        primary="Email support"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                  </List>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    sx={{ mt: 3 }}
+                  >
+                    Get Started
+                  </Button>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            {/* Level 2 */}
+            <Grid item xs={12} md={4}>
+              <Card
+                elevation={2}
+                sx={{
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  transition: 'transform 0.2s, box-shadow 0.2s',
+                  '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: 4,
+                  },
+                }}
+              >
+                <CardContent sx={{ flexGrow: 1, p: 3 }}>
+                  <Typography variant="h5" component="h3" gutterBottom>
+                    Level 2
+                  </Typography>
+                  <Typography
+                    variant="subtitle1"
+                    color="text.secondary"
+                    gutterBottom
+                    sx={{ mb: 2 }}
+                  >
+                    Premium Coaching
+                  </Typography>
+                  <Box sx={{ my: 2 }}>
+                    <Typography
+                      variant="h4"
+                      component="span"
+                      sx={{ fontWeight: 600 }}
+                    >
+                      $179
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      component="span"
+                      sx={{ ml: 1 }}
+                    >
+                      /month
+                    </Typography>
+                  </Box>
+                  <Divider sx={{ my: 2 }} />
+                  <List dense>
+                    <ListItem disablePadding sx={{ py: 0.5 }}>
+                      <CheckCircleIcon
+                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
+                      />
+                      <ListItemText
+                        primary="Everything in Level 1"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                    <ListItem disablePadding sx={{ py: 0.5 }}>
+                      <CheckCircleIcon
+                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
+                      />
+                      <ListItemText
+                        primary="Bi-weekly plan adjustments"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                    <ListItem disablePadding sx={{ py: 0.5 }}>
+                      <CheckCircleIcon
+                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
+                      />
+                      <ListItemText
+                        primary="Weekly check-ins"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                    <ListItem disablePadding sx={{ py: 0.5 }}>
+                      <CheckCircleIcon
+                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
+                      />
+                      <ListItemText
+                        primary="Form analysis & feedback"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                  </List>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    sx={{ mt: 3 }}
+                  >
+                    Get Started
+                  </Button>
+                </CardContent>
+              </Card>
+            </Grid>
+
+            {/* Level 3 - Elite */}
+            <Grid item xs={12} md={4}>
+              <Card
+                elevation={4}
+                sx={{
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  position: 'relative',
+                  border: '2px solid',
+                  borderColor: 'primary.main',
+                  transition: 'transform 0.2s, box-shadow 0.2s',
+                  '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: 6,
+                  },
+                }}
+              >
+                <Chip
+                  label="Most Popular"
+                  color="primary"
+                  sx={{
+                    position: 'absolute',
+                    top: 16,
+                    right: 16,
+                    fontWeight: 600,
+                  }}
+                />
+                <CardContent sx={{ flexGrow: 1, p: 3, pt: 5 }}>
+                  <Typography variant="h5" component="h3" gutterBottom>
+                    Level 3
+                  </Typography>
+                  <Typography
+                    variant="h6"
+                    color="primary.main"
+                    gutterBottom
+                    sx={{ mb: 2, fontWeight: 600 }}
+                  >
+                    Elite Virtual 1-on-1 Coaching
+                  </Typography>
+                  <Box sx={{ my: 2 }}>
+                    <Typography
+                      variant="h4"
+                      component="span"
+                      sx={{ fontWeight: 600 }}
+                    >
+                      $299
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="text.secondary"
+                      component="span"
+                      sx={{ ml: 1 }}
+                    >
+                      /month
+                    </Typography>
+                  </Box>
+                  <Divider sx={{ my: 2 }} />
+                  <List dense>
+                    <ListItem disablePadding sx={{ py: 0.5 }}>
+                      <CheckCircleIcon
+                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
+                      />
+                      <ListItemText
+                        primary="Everything in Level 2"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                    <ListItem disablePadding sx={{ py: 0.5 }}>
+                      <CheckCircleIcon
+                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
+                      />
+                      <ListItemText
+                        primary="Weekly 1-on-1 video calls"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                    <ListItem disablePadding sx={{ py: 0.5 }}>
+                      <CheckCircleIcon
+                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
+                      />
+                      <ListItemText
+                        primary="Real-time plan adjustments"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                    <ListItem disablePadding sx={{ py: 0.5 }}>
+                      <CheckCircleIcon
+                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
+                      />
+                      <ListItemText
+                        primary="Priority support"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                    <ListItem disablePadding sx={{ py: 0.5 }}>
+                      <CheckCircleIcon
+                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
+                      />
+                      <ListItemText
+                        primary="Nutrition & recovery guidance"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                  </List>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    fullWidth
+                    size="large"
+                    sx={{ mt: 3, py: 1.5 }}
+                  >
+                    Get Started
+                  </Button>
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
+
+      {/* Optional Add-Ons Section */}
+      <Box
+        sx={{
+          py: { xs: 6, md: 8 },
+          px: 2,
+          backgroundColor: 'background.paper',
+        }}
+      >
+        <Container maxWidth="lg">
+          <Typography
+            variant="h3"
+            component="h2"
+            align="center"
+            gutterBottom
+            sx={{ mb: 4 }}
+          >
+            Optional Add-Ons
+          </Typography>
+          <Typography
+            variant="body1"
+            align="center"
+            color="text.secondary"
+            sx={{ mb: 5, maxWidth: '600px', mx: 'auto' }}
+          >
+            Enhance your coaching experience with specialized add-on services
+          </Typography>
+          <Grid container spacing={4} justifyContent="center">
+            <Grid item xs={12} sm={6} md={5}>
+              <Paper
+                elevation={2}
+                sx={{
+                  p: 4,
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                }}
+              >
+                <Typography variant="h5" component="h3" gutterBottom>
+                  Strength Training Program
+                </Typography>
+                <Box sx={{ my: 2 }}>
+                  <Typography
+                    variant="h5"
+                    component="span"
+                    sx={{ fontWeight: 600 }}
+                  >
+                    $49
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    component="span"
+                    sx={{ ml: 1 }}
+                  >
+                    /month
+                  </Typography>
+                </Box>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                  Comprehensive strength training program designed specifically
+                  for runners. Includes exercises, progressions, and form videos
+                  to improve power, prevent injury, and enhance running
+                  performance.
+                </Typography>
+                <List dense>
+                  <ListItem disablePadding sx={{ py: 0.5 }}>
+                    <CheckCircleIcon
+                      sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
+                    />
+                    <ListItemText
+                      primary="Runner-specific exercises"
+                      primaryTypographyProps={{ variant: 'body2' }}
+                    />
+                  </ListItem>
+                  <ListItem disablePadding sx={{ py: 0.5 }}>
+                    <CheckCircleIcon
+                      sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
+                    />
+                    <ListItemText
+                      primary="2-3 sessions per week"
+                      primaryTypographyProps={{ variant: 'body2' }}
+                    />
+                  </ListItem>
+                  <ListItem disablePadding sx={{ py: 0.5 }}>
+                    <CheckCircleIcon
+                      sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
+                    />
+                    <ListItemText
+                      primary="Form videos & progressions"
+                      primaryTypographyProps={{ variant: 'body2' }}
+                    />
+                  </ListItem>
+                </List>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  fullWidth
+                  sx={{ mt: 3 }}
+                >
+                  Add Strength Training
+                </Button>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} sm={6} md={5}>
+              <Paper
+                elevation={2}
+                sx={{
+                  p: 4,
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                }}
+              >
+                <Typography variant="h5" component="h3" gutterBottom>
+                  Race Strategy Consultation
+                </Typography>
+                <Box sx={{ my: 2 }}>
+                  <Typography
+                    variant="h5"
+                    component="span"
+                    sx={{ fontWeight: 600 }}
+                  >
+                    $99
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    component="span"
+                    sx={{ ml: 1 }}
+                  >
+                    /session
+                  </Typography>
+                </Box>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                  One-on-one race strategy session to develop a personalized
+                  race plan. Includes pacing strategy, nutrition plan, mental
+                  preparation, and course-specific tactics for your target race.
+                </Typography>
+                <List dense>
+                  <ListItem disablePadding sx={{ py: 0.5 }}>
+                    <CheckCircleIcon
+                      sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
+                    />
+                    <ListItemText
+                      primary="90-minute strategy session"
+                      primaryTypographyProps={{ variant: 'body2' }}
+                    />
+                  </ListItem>
+                  <ListItem disablePadding sx={{ py: 0.5 }}>
+                    <CheckCircleIcon
+                      sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
+                    />
+                    <ListItemText
+                      primary="Personalized pacing plan"
+                      primaryTypographyProps={{ variant: 'body2' }}
+                    />
+                  </ListItem>
+                  <ListItem disablePadding sx={{ py: 0.5 }}>
+                    <CheckCircleIcon
+                      sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
+                    />
+                    <ListItemText
+                      primary="Written race strategy document"
+                      primaryTypographyProps={{ variant: 'body2' }}
+                    />
+                  </ListItem>
+                </List>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  fullWidth
+                  sx={{ mt: 3 }}
+                >
+                  Book Consultation
+                </Button>
+              </Paper>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
+    </>
+  );
+}
+
+export default CoachingAndPricing;
+

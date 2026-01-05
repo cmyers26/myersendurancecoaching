@@ -100,10 +100,10 @@ function Home() {
                 }}
               >
                 <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                  <Typography variant="h5" component="h3" gutterBottom>
+                  <Typography variant="h5" textAlign="center" component="h3" gutterBottom>
                     Busy Professionals
                   </Typography>
-                  <Typography variant="body1" color="text.secondary">
+                  <Typography variant="body1" color="text.secondary" textAlign="center">
                     Maximize your limited training time with efficient,
                     science-backed workouts that fit into your schedule.
                   </Typography>
@@ -125,10 +125,10 @@ function Home() {
                 }}
               >
                 <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                  <Typography variant="h5" component="h3" gutterBottom>
+                  <Typography variant="h5" textAlign="center" component="h3" gutterBottom>
                     Goal-Oriented Runners
                   </Typography>
-                  <Typography variant="body1" color="text.secondary">
+                  <Typography variant="body1" color="text.secondary" textAlign="center">
                     Whether you're training for your first 5K or aiming for a
                     marathon PR, get personalized guidance to reach your
                     targets.
@@ -151,10 +151,10 @@ function Home() {
                 }}
               >
                 <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                  <Typography variant="h5" component="h3" gutterBottom>
+                  <Typography variant="h5" textAlign="center" component="h3" gutterBottom>
                     Injury-Prevention Focused
                   </Typography>
-                  <Typography variant="body1" color="text.secondary">
+                  <Typography variant="body1" color="text.secondary" textAlign="center">
                     Learn to train sustainably with proper progression, recovery,
                     and form guidance to keep you running strong for years to
                     come.

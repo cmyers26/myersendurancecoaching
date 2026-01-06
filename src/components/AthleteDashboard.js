@@ -19,6 +19,10 @@ const planDetails = {
     name: '5K Training Plan',
     type: 'Downloadable Plan',
   },
+  'pdf-10k': {
+    name: '10K Training Plan',
+    type: 'Downloadable Plan',
+  },
   'pdf-half': {
     name: 'Half Marathon Plan',
     type: 'Downloadable Plan',
@@ -28,15 +32,15 @@ const planDetails = {
     type: 'Downloadable Plan',
   },
   level1: {
-    name: 'Level 1 - Essential Coaching',
+    name: 'Bronze - Essential Coaching',
     type: 'Monthly Coaching',
   },
   level2: {
-    name: 'Level 2 - Premium Coaching',
+    name: 'Silver - Premium Coaching',
     type: 'Monthly Coaching',
   },
   level3: {
-    name: 'Level 3 - Elite Virtual 1-on-1 Coaching',
+    name: 'Gold - Elite Virtual 1-on-1 Coaching',
     type: 'Monthly Coaching',
   },
 };
@@ -57,7 +61,7 @@ function AthleteDashboard() {
       >
         <Container maxWidth="lg">
           <Typography
-            variant="h2"
+            variant="h3"
             component="h1"
             gutterBottom
             sx={{ mb: 2 }}

@@ -113,7 +113,7 @@ function Contact() {
         <Container maxWidth="md">
           <Box sx={{ textAlign: 'center', maxWidth: '700px', mx: 'auto' }}>
             <Typography
-              variant="h2"
+              variant="h3"
               component="h1"
               gutterBottom
               sx={{ mb: 3 }}

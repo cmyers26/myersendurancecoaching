@@ -94,7 +94,7 @@ function GetStarted() {
         <Container maxWidth="md">
           <Box sx={{ textAlign: 'center', maxWidth: '700px', mx: 'auto' }}>
             <Typography
-              variant="h2"
+              variant="h3"
               component="h1"
               gutterBottom
               sx={{ mb: 3 }}
@@ -182,7 +182,7 @@ function GetStarted() {
 
               <TextField
                 fullWidth
-                label="Longest Distance Completed"
+                label="Longest Race Distance Completed"
                 value={formData.longestDistance}
                 onChange={(e) => handleChange('longestDistance', e.target.value)}
                 helperText="e.g., 5K, 10K, Half Marathon, Marathon"
@@ -209,6 +209,16 @@ function GetStarted() {
                     value="improve-5k"
                     control={<Radio />}
                     label="Improve my 5K time"
+                  />
+                  <FormControlLabel
+                    value="first-10k"
+                    control={<Radio />}
+                    label="Complete my first 10K"
+                  />
+                  <FormControlLabel
+                    value="improve-10k"
+                    control={<Radio />}
+                    label="Improve my 10K time"
                   />
                   <FormControlLabel
                     value="half-marathon"

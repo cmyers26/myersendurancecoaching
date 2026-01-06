@@ -43,6 +43,7 @@ function OnboardingIntake() {
     preferredDays: [],
     preferredTime: '',
     weeklyHours: '',
+    interestedInCrossTraining: false,
     // Injury History
     hasInjuries: '',
     injuryDetails: '',
@@ -242,6 +243,7 @@ function OnboardingIntake() {
           weekly_hours: formData.weeklyHours
             ? parseFloat(formData.weeklyHours)
             : null,
+          interested_in_cross_training: formData.interestedInCrossTraining,
         }),
         // Injury history column - combine injury-related fields
         injury_history: JSON.stringify({
@@ -301,7 +303,7 @@ function OnboardingIntake() {
       >
         <Container maxWidth="md">
           <Typography
-            variant="h2"
+            variant="h3"
             component="h1"
             align="center"
             gutterBottom
@@ -360,7 +362,7 @@ function OnboardingIntake() {
 
               {/* Runner Background Section */}
               <Typography
-                variant="h4"
+                variant="h5"
                 component="h2"
                 gutterBottom
                 sx={{ mb: 3 }}
@@ -432,7 +434,7 @@ function OnboardingIntake() {
                 <Grid item xs={12} sm={6}>
                   <TextField
                     fullWidth
-                    label="Longest Distance Completed"
+                    label="Longest Race Distance Completed"
                     value={formData.longestDistance}
                     onChange={(e) =>
                       handleChange('longestDistance', e.target.value)
@@ -455,7 +457,7 @@ function OnboardingIntake() {
 
               {/* Goals Section */}
               <Typography
-                variant="h4"
+                variant="h5"
                 component="h2"
                 gutterBottom
                 sx={{ mb: 3 }}
@@ -483,6 +485,16 @@ function OnboardingIntake() {
                     value="improve-5k"
                     control={<Radio />}
                     label="Improve my 5K time"
+                  />
+                  <FormControlLabel
+                    value="first-10k"
+                    control={<Radio />}
+                    label="Complete my first 10K"
+                  />
+                  <FormControlLabel
+                    value="improve-10k"
+                    control={<Radio />}
+                    label="Improve my 10K time"
                   />
                   <FormControlLabel
                     value="half-marathon"
@@ -546,7 +558,7 @@ function OnboardingIntake() {
 
               {/* Availability Section */}
               <Typography
-                variant="h4"
+                variant="h5"
                 component="h2"
                 gutterBottom
                 sx={{ mb: 3 }}
@@ -666,11 +678,25 @@ function OnboardingIntake() {
                 </Grid>
               </Grid>
 
+              <FormControl component="fieldset" sx={{ mb: 3 }}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={formData.interestedInCrossTraining}
+                      onChange={(e) =>
+                        handleChange('interestedInCrossTraining', e.target.checked)
+                      }
+                    />
+                  }
+                  label="I'm interested in adding cross training to my program"
+                />
+              </FormControl>
+
               <Divider sx={{ my: 4 }} />
 
               {/* Injury History Section */}
               <Typography
-                variant="h4"
+                variant="h5"
                 component="h2"
                 gutterBottom
                 sx={{ mb: 3 }}

@@ -20,6 +20,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 function CoachingAndPricing() {
   const navigate = useNavigate();
   const { setSelectedPlan } = useAppContext();
+  const heroImageUrl = '/images/pexels-bohlemedia-2803160.jpg';
 
   const handlePlanSelect = (planName) => {
     setSelectedPlan(planName);
@@ -30,30 +31,37 @@ function CoachingAndPricing() {
       {/* Page Header */}
       <Box
         sx={{
-          py: { xs: 4, md: 6 },
+          py: { xs: 6, md: 8 },
           px: 2,
-          backgroundColor: 'background.default',
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url(${heroImageUrl})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          minHeight: { xs: '60vh', md: '70vh' },
+          display: 'flex',
+          alignItems: 'center',
         }}
       >
         <Container maxWidth="lg">
-          <Typography
-            variant="h2"
-            component="h1"
-            align="center"
-            gutterBottom
-            sx={{ mb: 2 }}
-          >
-            Coaching & Pricing
-          </Typography>
-          <Typography
-            variant="h6"
-            align="center"
-            color="text.secondary"
-            sx={{ maxWidth: '700px', mx: 'auto', fontWeight: 400 }}
-          >
-            Choose the coaching option that best fits your goals and commitment
-            level
-          </Typography>
+          <Box sx={{ textAlign: 'center', maxWidth: '800px', mx: 'auto', color: 'white' }}>
+            <Typography
+              variant="h4"
+              component="h1"
+              align="center"
+              gutterBottom
+              sx={{ mb: 2, color: 'white' }}
+            >
+              Coaching Options & Pricing
+            </Typography>
+            <Typography
+              variant="h6"
+              align="center"
+              sx={{ maxWidth: '700px', mx: 'auto', fontWeight: 400, color: 'rgba(255, 255, 255, 0.9)' }}
+            >
+              Choose the coaching option that best fits your goals and commitment
+              level, downloadable training plans, or personalized coaching tiers.
+            </Typography>
+          </Box>
         </Container>
       </Box>
 
@@ -67,7 +75,7 @@ function CoachingAndPricing() {
       >
         <Container maxWidth="lg">
           <Typography
-            variant="h3"
+            variant="h4"
             component="h2"
             align="center"
             gutterBottom
@@ -83,7 +91,7 @@ function CoachingAndPricing() {
           >
             Self-paced training plans you can download and follow at your own
             pace. Perfect for runners who prefer structure without ongoing
-            support.
+            support. Each plan is designed based on your individual running experience and goals.
           </Typography>
           <Grid container spacing={4} justifyContent="center">
             <Grid item xs={12} sm={6} md={4}>
@@ -134,6 +142,61 @@ function CoachingAndPricing() {
                     color="primary"
                     fullWidth
                     onClick={() => handlePlanSelect('pdf-5k')}
+                    sx={{ mt: 3 }}
+                  >
+                    Purchase Plan
+                  </Button>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <Card
+                elevation={2}
+                sx={{
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  position: 'relative',
+                }}
+              >
+                <CardContent sx={{ flexGrow: 1, p: 3 }}>
+                  <Typography variant="h5" component="h3" gutterBottom>
+                    10K Training Plan
+                  </Typography>
+                  <Box sx={{ my: 2 }}>
+                    <Typography
+                      variant="h4"
+                      component="span"
+                      sx={{ fontWeight: 600 }}
+                    >
+                      $35
+                    </Typography>
+                  </Box>
+                  <List dense>
+                    <ListItem disablePadding>
+                      <ListItemText
+                        primary="12-week structured plan"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                    <ListItem disablePadding>
+                      <ListItemText
+                        primary="Beginner to intermediate"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                    <ListItem disablePadding>
+                      <ListItemText
+                        primary="PDF download"
+                        primaryTypographyProps={{ variant: 'body2' }}
+                      />
+                    </ListItem>
+                  </List>
+                  <Button
+                    variant="outlined"
+                    color="primary"
+                    fullWidth
+                    onClick={() => handlePlanSelect('pdf-10k')}
                     sx={{ mt: 3 }}
                   >
                     Purchase Plan
@@ -243,6 +306,7 @@ function CoachingAndPricing() {
                     variant="outlined"
                     color="primary"
                     fullWidth
+                    onClick={() => handlePlanSelect('pdf-marathon')}
                     sx={{ mt: 3 }}
                   >
                     Purchase Plan
@@ -264,7 +328,7 @@ function CoachingAndPricing() {
       >
         <Container maxWidth="lg">
           <Typography
-            variant="h3"
+            variant="h4"
             component="h2"
             align="center"
             gutterBottom
@@ -273,7 +337,7 @@ function CoachingAndPricing() {
             Personalized Coaching Tiers
           </Typography>
           <Grid container spacing={4} justifyContent="center">
-            {/* Level 1 */}
+            {/* Bronze */}
             <Grid item xs={12} md={4}>
               <Card
                 elevation={2}
@@ -290,7 +354,7 @@ function CoachingAndPricing() {
               >
                 <CardContent sx={{ flexGrow: 1, p: 3 }}>
                   <Typography variant="h5" component="h3" gutterBottom>
-                    Level 1
+                    Bronze
                   </Typography>
                   <Typography
                     variant="subtitle1"
@@ -360,7 +424,7 @@ function CoachingAndPricing() {
               </Card>
             </Grid>
 
-            {/* Level 2 */}
+            {/* Silver */}
             <Grid item xs={12} md={4}>
               <Card
                 elevation={2}
@@ -377,7 +441,7 @@ function CoachingAndPricing() {
               >
                 <CardContent sx={{ flexGrow: 1, p: 3 }}>
                   <Typography variant="h5" component="h3" gutterBottom>
-                    Level 2
+                    Silver
                   </Typography>
                   <Typography
                     variant="subtitle1"
@@ -411,7 +475,7 @@ function CoachingAndPricing() {
                         sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
                       />
                       <ListItemText
-                        primary="Everything in Level 1"
+                        primary="Everything in Bronze"
                         primaryTypographyProps={{ variant: 'body2' }}
                       />
                     </ListItem>
@@ -429,7 +493,7 @@ function CoachingAndPricing() {
                         sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
                       />
                       <ListItemText
-                        primary="Weekly check-ins"
+                        primary="Weekly phone check-ins"
                         primaryTypographyProps={{ variant: 'body2' }}
                       />
                     </ListItem>
@@ -456,7 +520,7 @@ function CoachingAndPricing() {
               </Card>
             </Grid>
 
-            {/* Level 3 - Elite */}
+            {/* Gold - Elite */}
             <Grid item xs={12} md={4}>
               <Card
                 elevation={4}
@@ -486,7 +550,7 @@ function CoachingAndPricing() {
                 />
                 <CardContent sx={{ flexGrow: 1, p: 3, pt: 5 }}>
                   <Typography variant="h5" component="h3" gutterBottom>
-                    Level 3
+                    Gold
                   </Typography>
                   <Typography
                     variant="h6"
@@ -520,7 +584,7 @@ function CoachingAndPricing() {
                         sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
                       />
                       <ListItemText
-                        primary="Everything in Level 2"
+                        primary="Everything in Silver"
                         primaryTypographyProps={{ variant: 'body2' }}
                       />
                     </ListItem>
@@ -588,7 +652,7 @@ function CoachingAndPricing() {
       >
         <Container maxWidth="lg">
           <Typography
-            variant="h3"
+            variant="h4"
             component="h2"
             align="center"
             gutterBottom
@@ -638,8 +702,7 @@ function CoachingAndPricing() {
                   </Box>
                   <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                     Comprehensive strength training program designed specifically
-                    for runners. Includes exercises, progressions, and form videos
-                    to improve power, prevent injury, and enhance running
+                    for runners. Includes exercises, progressions, mobility work to improve power, prevent injury, and enhance running
                     performance.
                   </Typography>
                   <List dense>
@@ -666,7 +729,7 @@ function CoachingAndPricing() {
                         sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
                       />
                       <ListItemText
-                        primary="Form videos & progressions"
+                        primary="mobility work & progressions"
                         primaryTypographyProps={{ variant: 'body2' }}
                       />
                     </ListItem>
@@ -724,7 +787,7 @@ function CoachingAndPricing() {
                         sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
                       />
                       <ListItemText
-                        primary="90-minute strategy session"
+                        primary="60-minute strategy session"
                         primaryTypographyProps={{ variant: 'body2' }}
                       />
                     </ListItem>

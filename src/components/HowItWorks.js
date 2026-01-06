@@ -13,6 +13,7 @@ import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 
 function HowItWorks() {
+  const heroImageUrl = '/images/pexels-runffwpu-1571939.jpg';
   const steps = [
     {
       icon: <DescriptionIcon sx={{ fontSize: 48 }} />,
@@ -47,30 +48,34 @@ function HowItWorks() {
         sx={{
           py: { xs: 6, md: 8 },
           px: 2,
-          backgroundColor: 'background.default',
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url(${heroImageUrl})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          minHeight: { xs: '60vh', md: '70vh' },
+          display: 'flex',
+          alignItems: 'center',
         }}
       >
         <Container maxWidth="lg">
-          <Box sx={{ textAlign: 'center', maxWidth: '800px', mx: 'auto' }}>
+          <Box sx={{ textAlign: 'center', maxWidth: '800px', mx: 'auto', color: 'white' }}>
             <Typography
-              variant="h2"
+              variant="h3"
               component="h1"
               gutterBottom
-              sx={{ mb: 3 }}
+              sx={{ mb: 3, color: 'white' }}
             >
               How It Works
             </Typography>
             <Typography
               variant="h6"
-              color="text.secondary"
-              sx={{ mb: 2, fontWeight: 400 }}
+              sx={{ mb: 2, fontWeight: 400, color: 'rgba(255, 255, 255, 0.9)' }}
             >
               A simple, flexible coaching process designed for busy adults
             </Typography>
             <Typography
               variant="body1"
-              color="text.secondary"
-              sx={{ maxWidth: '700px', mx: 'auto' }}
+              sx={{ maxWidth: '700px', mx: 'auto', color: 'rgba(255, 255, 255, 0.85)' }}
             >
               We understand that adult runners have demanding schedules, family
               commitments, and varying availability. Our coaching process is

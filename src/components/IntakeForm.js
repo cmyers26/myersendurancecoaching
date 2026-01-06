@@ -54,6 +54,7 @@ function IntakeForm() {
     preferredDays: [],
     preferredTime: '',
     weeklyHours: '',
+    interestedInCrossTraining: false,
     // Injury History
     hasInjuries: '',
     injuryDetails: '',
@@ -285,7 +286,7 @@ function IntakeForm() {
               <Grid item xs={12} sm={6}>
                 <TextField
                   fullWidth
-                  label="Longest Distance Completed"
+                  label="Longest Race Distance Completed"
                   value={formData.longestDistance}
                   onChange={(e) => handleChange('longestDistance', e.target.value)}
                   helperText="e.g., 5K, 10K, Half Marathon, Marathon"
@@ -327,6 +328,16 @@ function IntakeForm() {
                   value="improve-5k"
                   control={<Radio />}
                   label="Improve my 5K time"
+                />
+                <FormControlLabel
+                  value="first-10k"
+                  control={<Radio />}
+                  label="Complete my first 10K"
+                />
+                <FormControlLabel
+                  value="improve-10k"
+                  control={<Radio />}
+                  label="Improve my 10K time"
                 />
                 <FormControlLabel
                   value="half-marathon"
@@ -594,6 +605,20 @@ function IntakeForm() {
                 />
               </Grid>
             </Grid>
+
+            <FormControl component="fieldset" sx={{ mt: 3 }}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={formData.interestedInCrossTraining}
+                    onChange={(e) =>
+                      handleChange('interestedInCrossTraining', e.target.checked)
+                    }
+                  />
+                }
+                label="I'm interested in adding cross training to my program"
+              />
+            </FormControl>
           </Box>
         );
 
@@ -683,7 +708,7 @@ function IntakeForm() {
       >
         <Container maxWidth="md">
           <Typography
-            variant="h2"
+            variant="h3"
             component="h1"
             align="center"
             gutterBottom

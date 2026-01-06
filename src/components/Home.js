@@ -13,6 +13,7 @@ import {
 
 function Home() {
   const navigate = useNavigate();
+  const heroImageUrl = '/images/pexels-packermann-878151.jpg';
 
   return (
     <>
@@ -21,7 +22,13 @@ function Home() {
         sx={{
           py: { xs: 6, md: 10 },
           px: 2,
-          backgroundColor: 'background.default',
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url(${heroImageUrl})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          minHeight: { xs: '60vh', md: '70vh' },
+          display: 'flex',
+          alignItems: 'center',
         }}
       >
         <Container maxWidth="lg">
@@ -30,21 +37,21 @@ function Home() {
               textAlign: 'center',
               maxWidth: '800px',
               mx: 'auto',
+              color: 'white',
             }}
           >
             <Typography
-              variant="h1"
+              variant="h2"
               component="h1"
               gutterBottom
               sx={{ mb: 3 }}
             >
-              Personalized Online Running Coaching for Adult Runners
+              Personalized Online Running Coaching
             </Typography>
             <Typography
               variant="h5"
               component="h2"
-              color="text.secondary"
-              sx={{ mb: 4, fontWeight: 400 }}
+              sx={{ mb: 4, fontWeight: 400, color: 'rgba(255, 255, 255, 0.9)' }}
             >
               Smart, sustainable training designed to help you achieve your goals
               while staying healthy and injury-free
@@ -76,7 +83,7 @@ function Home() {
       >
         <Container maxWidth="lg">
           <Typography
-            variant="h3"
+            variant="h4"
             component="h2"
             align="center"
             gutterBottom
@@ -106,6 +113,30 @@ function Home() {
                   <Typography variant="body1" color="text.secondary" textAlign="center">
                     Maximize your limited training time with efficient,
                     science-backed workouts that fit into your schedule.
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Card
+                elevation={2}
+                sx={{
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  transition: 'transform 0.2s, box-shadow 0.2s',
+                  '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: 4,
+                  },
+                }}
+              >
+                <CardContent sx={{ flexGrow: 1, p: 3 }}>
+                  <Typography variant="h5" textAlign="center" component="h3" gutterBottom>
+                    Post Collegiate Runners
+                  </Typography>
+                  <Typography variant="body1" color="text.secondary" textAlign="center">
+                    Get personalized guidance to help you transition from collegiate running to the next level of your running career.
                   </Typography>
                 </CardContent>
               </Card>
@@ -176,7 +207,7 @@ function Home() {
       >
         <Container maxWidth="lg">
           <Typography
-            variant="h3"
+            variant="h4"
             component="h2"
             align="center"
             gutterBottom

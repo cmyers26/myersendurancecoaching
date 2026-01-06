@@ -26,6 +26,16 @@ const planDetails = {
       'PDF download',
     ],
   },
+  'pdf-10k': {
+    name: '10K Training Plan',
+    type: 'Downloadable Plan',
+    price: 35,
+    features: [
+      '12-week structured plan',
+      'Beginner to intermediate',
+      'PDF download',
+    ],
+  },
   'pdf-half': {
     name: 'Half Marathon Plan',
     type: 'Downloadable Plan',
@@ -47,7 +57,7 @@ const planDetails = {
     ],
   },
   level1: {
-    name: 'Level 1 - Essential Coaching',
+    name: 'Bronze - Essential Coaching',
     type: 'Monthly Coaching',
     price: 99,
     features: [
@@ -57,22 +67,22 @@ const planDetails = {
     ],
   },
   level2: {
-    name: 'Level 2 - Premium Coaching',
+    name: 'Silver - Premium Coaching',
     type: 'Monthly Coaching',
     price: 179,
     features: [
-      'Everything in Level 1',
+      'Everything in Bronze',
       'Bi-weekly plan adjustments',
       'Weekly check-ins',
       'Form analysis & feedback',
     ],
   },
   level3: {
-    name: 'Level 3 - Elite Virtual 1-on-1 Coaching',
+    name: 'Gold - Elite Virtual 1-on-1 Coaching',
     type: 'Monthly Coaching',
     price: 299,
     features: [
-      'Everything in Level 2',
+      'Everything in Silver',
       'Weekly 1-on-1 video calls',
       'Real-time plan adjustments',
       'Priority support',
@@ -122,7 +132,7 @@ function Checkout() {
       >
         <Container maxWidth="md">
           <Typography
-            variant="h2"
+            variant="h3"
             component="h1"
             align="center"
             gutterBottom
@@ -192,7 +202,7 @@ function Checkout() {
                 Total
               </Typography>
               <Typography
-                variant="h4"
+                variant="h5"
                 component="span"
                 sx={{ fontWeight: 600, color: 'primary.main' }}
               >
@@ -212,8 +222,8 @@ function Checkout() {
 
             <Alert severity="info" sx={{ mb: 3 }}>
               {plan.type === 'Downloadable Plan'
-                ? 'You will receive a download link via email after purchase.'
-                : 'Your coaching subscription will begin immediately after purchase.'}
+                ? 'You will receive a download link via email after purchase. Please allow 2-3 days for the plan to be formulated by Coach Chad and delivered.'
+                : 'Your coaching subscription will begin immediately after purchase. Coach Chad will reach out to you via email to schedule an onboarding call.'}
             </Alert>
 
             <Button

@@ -668,8 +668,15 @@ function CoachingAndPricing() {
           >
             Enhance your coaching experience with specialized add-on services
           </Typography>
-          <Grid container spacing={4} justifyContent="center" flexWrap="nowrap">
-            <Grid item xs={12} sm={6} md={6}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: { xs: 'column', md: 'row' },
+              gap: 4,
+              justifyContent: 'center',
+            }}
+          >
+            <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 50%' }, maxWidth: { md: '500px' } }}>
               <Card
                 elevation={2}
                 sx={{
@@ -744,8 +751,8 @@ function CoachingAndPricing() {
                   </Button>
                 </CardContent>
               </Card>
-            </Grid>
-            <Grid item xs={12} sm={6} md={6}>
+            </Box>
+            <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 50%' }, maxWidth: { md: '500px' } }}>
               <Card
                 elevation={2}
                 sx={{
@@ -820,8 +827,8 @@ function CoachingAndPricing() {
                   </Button>
                 </CardContent>
               </Card>
-            </Grid>
-          </Grid>
+            </Box>
+          </Box>
         </Container>
       </Box>
     </>

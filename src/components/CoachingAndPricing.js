@@ -24,7 +24,7 @@ function CoachingAndPricing() {
 
   const handlePlanSelect = (planName) => {
     setSelectedPlan(planName);
-    navigate(`/checkout/${planName}`);
+    navigate(`/checkout?product=${planName}`);
   };
   return (
     <>
@@ -745,6 +745,7 @@ function CoachingAndPricing() {
                     variant="outlined"
                     color="primary"
                     fullWidth
+                    onClick={() => handlePlanSelect('addon-strength')}
                     sx={{ mt: 3 }}
                   >
                     Add Strength Training
@@ -821,6 +822,7 @@ function CoachingAndPricing() {
                     variant="outlined"
                     color="primary"
                     fullWidth
+                    onClick={() => handlePlanSelect('addon-race-strategy')}
                     sx={{ mt: 3 }}
                   >
                     Book Consultation

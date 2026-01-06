@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { supabase } from '../lib/supabase';
+import AddOnIntakeForm from './AddOnIntakeForm';
 import {
   Container,
   Typography,
@@ -17,6 +20,8 @@ import {
   StepLabel,
   Paper,
   Grid,
+  Alert,
+  CircularProgress,
 } from '@mui/material';
 
 const steps = [
@@ -28,8 +33,18 @@ const steps = [
 ];
 
 function IntakeForm() {
+  const [searchParams] = useSearchParams();
+  const productParam = searchParams.get('product');
+  const isAddon = productParam && productParam.includes('addon');
+  
+  // All hooks must be called before any conditional returns
   const [activeStep, setActiveStep] = useState(0);
   const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
+  const [submitSuccess, setSubmitSuccess] = useState(false);
+  
+  // Full form data for coaching intake
   const [formData, setFormData] = useState({
     // Personal Information
     firstName: '',
@@ -151,12 +166,154 @@ function IntakeForm() {
     setActiveStep((prevStep) => prevStep - 1);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateStep(activeStep)) {
-      console.log('Form Data Submitted:', formData);
-      alert('Thank you! Your intake form has been submitted. We will be in touch soon.');
-      // Here you would typically send the data to your backend
+    setSubmitError('');
+    setSubmitSuccess(false);
+
+    if (!validateStep(activeStep)) {
+      return;
+    }
+
+    // Only submit if we're on the last step
+    if (activeStep !== steps.length - 1) {
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      const email = formData.email.trim().toLowerCase();
+      let userId;
+
+      // Step 1: Check if user exists by email
+      const { data: existingUsers, error: checkError } = await supabase
+        .from('users')
+        .select('id')
+        .eq('email', email)
+        .limit(1);
+
+      if (checkError) {
+        console.error('Check user error:', checkError);
+        if (
+          checkError.message.includes('row-level security') ||
+          checkError.message.includes('RLS') ||
+          checkError.code === '42501'
+        ) {
+          throw new Error(
+            `RLS Policy Error: Missing SELECT policy on 'users' table. Please create a SELECT policy. Error: ${checkError.message}`
+          );
+        }
+        throw new Error(`Failed to check user: ${checkError.message}`);
+      }
+
+      // Step 2: Create or update user
+      if (!existingUsers || existingUsers.length === 0) {
+        const { data: newUser, error: insertUserError } = await supabase
+          .from('users')
+          .insert([
+            {
+              email: email,
+              product_type: productParam || null,
+              intake_complete: true,
+              created_at: new Date().toISOString(),
+            },
+          ])
+          .select('id')
+          .single();
+
+        if (insertUserError) {
+          console.error('User creation error:', insertUserError);
+          if (
+            insertUserError.message.includes('row-level security') ||
+            insertUserError.message.includes('RLS') ||
+            insertUserError.code === '42501'
+          ) {
+            throw new Error(
+              `RLS Policy Error: ${insertUserError.message}. Please verify that an INSERT policy exists for the 'users' table. Error code: ${insertUserError.code || 'N/A'}`
+            );
+          }
+          throw new Error(`Failed to create user: ${insertUserError.message} (Code: ${insertUserError.code || 'N/A'})`);
+        }
+
+        userId = newUser.id;
+      } else {
+        userId = existingUsers[0].id;
+        
+        const { error: updateUserError } = await supabase
+          .from('users')
+          .update({
+            product_type: productParam || null,
+            intake_complete: true,
+          })
+          .eq('id', userId);
+
+        if (updateUserError) {
+          console.error('User update error:', updateUserError);
+          throw new Error(`Failed to update user: ${updateUserError.message}`);
+        }
+      }
+
+      // Step 3: Insert intake data
+      const intakeData = {
+        user_id: userId,
+        experience: JSON.stringify({
+          level: formData.experienceLevel,
+          years_running: formData.yearsRunning
+            ? parseInt(formData.yearsRunning)
+            : null,
+          longest_distance: formData.longestDistance || null,
+          typical_pace: formData.typicalPace || null,
+        }),
+        weekly_mileage: formData.currentWeeklyMileage
+          ? parseInt(formData.currentWeeklyMileage)
+          : null,
+        goals: JSON.stringify({
+          primary_goal: formData.primaryGoal,
+          target_race: formData.targetRace || null,
+          target_date: formData.targetDate || null,
+          time_goal: formData.timeGoal || null,
+        }),
+        availability: JSON.stringify({
+          days_per_week: formData.daysPerWeek,
+          preferred_days: formData.preferredDays,
+          preferred_time: formData.preferredTime,
+          weekly_hours: formData.weeklyHours
+            ? parseFloat(formData.weeklyHours)
+            : null,
+          interested_in_cross_training: formData.interestedInCrossTraining,
+        }),
+        injury_history: JSON.stringify({
+          has_injuries: formData.hasInjuries === 'yes',
+          injury_details: formData.injuryDetails || null,
+          medical_conditions: formData.medicalConditions || null,
+        }),
+        current_issues: formData.currentIssues || null,
+        created_at: new Date().toISOString(),
+      };
+
+      const { error: intakeError } = await supabase
+        .from('intakes')
+        .insert([intakeData]);
+
+      if (intakeError) {
+        console.error('Intake insert error:', intakeError);
+        if (intakeError.message.includes('column') && intakeError.message.includes('schema cache')) {
+          throw new Error(
+            `Database schema error: ${intakeError.message}. Please check that all required columns exist in the 'intakes' table.`
+          );
+        }
+        throw new Error(`Failed to save intake: ${intakeError.message}`);
+      }
+
+      setSubmitSuccess(true);
+    } catch (error) {
+      console.error('Error submitting intake form:', error);
+      setSubmitError(
+        error.message || 'An error occurred while submitting your intake. Please try again.'
+      );
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -696,6 +853,13 @@ function IntakeForm() {
     }
   };
 
+  // If it's an addon, render the AddOnIntakeForm component
+  // This must be after all hooks are declared
+  if (isAddon) {
+    return <AddOnIntakeForm />;
+  }
+
+  // Render full coaching intake form
   return (
     <>
       {/* Page Header */}
@@ -738,6 +902,17 @@ function IntakeForm() {
       >
         <Container maxWidth="md">
           <Paper elevation={2} sx={{ p: { xs: 3, md: 4 } }}>
+            {submitSuccess && (
+              <Alert severity="success" sx={{ mb: 3 }}>
+                Thank you! Your intake form has been submitted successfully. We will be in touch soon.
+              </Alert>
+            )}
+            {submitError && (
+              <Alert severity="error" sx={{ mb: 3 }}>
+                {submitError}
+              </Alert>
+            )}
+            
             <Stepper activeStep={activeStep} sx={{ mb: 4 }}>
               {steps.map((label) => (
                 <Step key={label}>
@@ -746,44 +921,52 @@ function IntakeForm() {
               ))}
             </Stepper>
 
-            <form onSubmit={handleSubmit}>
-              <Typography variant="h5" component="h2" gutterBottom>
-                {steps[activeStep]}
-              </Typography>
+            {!submitSuccess &&
+              <form onSubmit={handleSubmit}>
+                <Typography variant="h5" component="h2" gutterBottom>
+                  {steps[activeStep]}
+                </Typography>
 
-              {renderStepContent(activeStep)}
+                {renderStepContent(activeStep)}
 
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
-                <Button
-                  disabled={activeStep === 0}
-                  onClick={handleBack}
-                  sx={{ mr: 1 }}
-                >
-                  Back
-                </Button>
-                <Box>
-                  {activeStep === steps.length - 1 ? (
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      size="large"
-                    >
-                      Submit
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={handleNext}
-                      size="large"
-                    >
-                      Next
-                    </Button>
-                  )}
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
+                  <Button
+                    disabled={activeStep === 0}
+                    onClick={handleBack}
+                    sx={{ mr: 1 }}
+                  >
+                    Back
+                  </Button>
+                  <Box>
+                    {activeStep === steps.length - 1 ? (
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        size="large"
+                        disabled={isSubmitting}
+                        startIcon={
+                          isSubmitting ? (
+                            <CircularProgress size={20} color="inherit" />
+                          ) : null
+                        }
+                      >
+                        {isSubmitting ? 'Submitting...' : 'Submit'}
+                      </Button>
+                    ) : (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={handleNext}
+                        size="large"
+                      >
+                        Next
+                      </Button>
+                    )}
+                  </Box>
                 </Box>
-              </Box>
-            </form>
+              </form>
+            }
           </Paper>
         </Container>
       </Box>

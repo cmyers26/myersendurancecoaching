@@ -158,16 +158,16 @@ function OnboardingIntake() {
         throw new Error(`Failed to check user: ${checkError.message}`);
       }
 
-      // Step 2: If user doesn't exist, create new user with plan_type
-      // If user exists, update plan_type and set intake_complete = true
+      // Step 2: If user doesn't exist, create new user with product_type
+      // If user exists, update product_type and set intake_complete = true
       if (!existingUsers || existingUsers.length === 0) {
-        // Create new user with plan_type
+        // Create new user with product_type
         const { data: newUser, error: insertUserError } = await supabase
           .from('users')
           .insert([
             {
               email: email,
-              plan_type: selectedPlan || null,
+              product_type: selectedPlan || null,
               intake_complete: true,
               created_at: new Date().toISOString(),
             },
@@ -194,13 +194,13 @@ function OnboardingIntake() {
 
         userId = newUser.id;
       } else {
-        // User exists - update plan_type and set intake_complete = true
+        // User exists - update product_type and set intake_complete = true
         userId = existingUsers[0].id;
         
         const { error: updateUserError } = await supabase
           .from('users')
           .update({
-            plan_type: selectedPlan || null,
+            product_type: selectedPlan || null,
             intake_complete: true,
           })
           .eq('id', userId);

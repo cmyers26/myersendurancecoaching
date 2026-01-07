@@ -23,6 +23,7 @@ const navigationLinks = [
   { label: 'Coaching', path: '/coaching' },
   { label: 'How It Works', path: '/how-it-works' },
   { label: 'About', path: '/about' },
+  { label: 'Split Calculator', path: 'https://www.splititstopwatch.com/', target: '_blank' },
   { label: 'Contact', path: '/contact' },
 ];
 
@@ -42,23 +43,29 @@ function AppLayout({ children }) {
         Myers Endurance Coaching
       </Typography>
       <List>
-        {navigationLinks.map((link) => (
-          <ListItem key={link.label} disablePadding>
-            <ListItemButton
-              component={Link}
-              to={link.path}
-              sx={{
-                textAlign: 'center',
-                backgroundColor:
-                  location.pathname === link.path
-                    ? 'rgba(0, 0, 0, 0.08)'
-                    : 'transparent',
-              }}
-            >
-              <ListItemText primary={link.label} />
-            </ListItemButton>
-          </ListItem>
-        ))}
+        {navigationLinks.map((link) => {
+          const isExternal = link.path.startsWith('http');
+          return (
+            <ListItem key={link.label} disablePadding>
+              <ListItemButton
+                component={isExternal ? 'a' : Link}
+                {...(isExternal
+                  ? { href: link.path, target: link.target || '_self' }
+                  : { to: link.path })}
+                rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
+                sx={{
+                  textAlign: 'center',
+                  backgroundColor:
+                    !isExternal && location.pathname === link.path
+                      ? 'rgba(0, 0, 0, 0.08)'
+                      : 'transparent',
+                }}
+              >
+                <ListItemText primary={link.label} />
+              </ListItemButton>
+            </ListItem>
+          );
+        })}
       </List>
     </Box>
   );
@@ -93,27 +100,33 @@ function AppLayout({ children }) {
           </Typography>
           {!isMobile && (
             <Box sx={{ display: 'flex', gap: 1 }}>
-              {navigationLinks.map((link) => (
-                <Button
-                  key={link.label}
-                  component={Link}
-                  to={link.path}
-                  color="inherit"
-                  sx={{
-                    textTransform: 'none',
-                    fontSize: '1rem',
-                    backgroundColor:
-                      location.pathname === link.path
-                        ? 'rgba(255, 255, 255, 0.2)'
-                        : 'transparent',
-                    '&:hover': {
-                      backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                    },
-                  }}
-                >
-                  {link.label}
-                </Button>
-              ))}
+              {navigationLinks.map((link) => {
+                const isExternal = link.path.startsWith('http');
+                return (
+                  <Button
+                    key={link.label}
+                    component={isExternal ? 'a' : Link}
+                    {...(isExternal
+                      ? { href: link.path, target: link.target || '_self' }
+                      : { to: link.path })}
+                    rel={link.target === '_blank' ? 'noopener noreferrer' : undefined}
+                    color="inherit"
+                    sx={{
+                      textTransform: 'none',
+                      fontSize: '1rem',
+                      backgroundColor:
+                        !isExternal && location.pathname === link.path
+                          ? 'rgba(255, 255, 255, 0.2)'
+                          : 'transparent',
+                      '&:hover': {
+                        backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                      },
+                    }}
+                  >
+                    {link.label}
+                  </Button>
+                );
+              })}
             </Box>
           )}
         </Toolbar>

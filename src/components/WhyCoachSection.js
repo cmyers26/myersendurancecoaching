@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Typography, Box, Grid, List, ListItem, ListItemText } from '@mui/material';
+import { Container, Typography, Box, Grid, List, ListItem } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 function WhyCoachSection() {

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import AddOnIntakeForm from './AddOnIntakeForm';
+import { productConfig } from '../config/productConfig';
 import {
   Container,
   Typography,
@@ -24,6 +25,25 @@ import {
   CircularProgress,
 } from '@mui/material';
 
+// Map old product format to new format
+const normalizeProductType = (productType) => {
+  if (!productType) return null;
+  
+  const mapping = {
+    'pdf-5k': 'pdf_5k',
+    'pdf-10k': 'pdf_10k',
+    'pdf-half': 'pdf_half',
+    'pdf-marathon': 'pdf_marathon',
+    'level1': 'level_1',
+    'level2': 'level_2',
+    'level3': 'level_3',
+    'addon-strength': 'strength_addon',
+    'addon-race-strategy': 'race_strategy_addon',
+  };
+  
+  return mapping[productType] || productType;
+};
+
 const steps = [
   'Personal Information',
   'Running Background',
@@ -35,7 +55,16 @@ const steps = [
 function IntakeForm() {
   const [searchParams] = useSearchParams();
   const productParam = searchParams.get('product');
-  const isAddon = productParam && productParam.includes('addon');
+  
+  // Normalize and validate product type
+  const normalizedProductType = useMemo(() => {
+    return productParam ? normalizeProductType(productParam) : null;
+  }, [productParam]);
+
+  // Get product from config to determine intake type
+  const product = normalizedProductType ? productConfig[normalizedProductType] : null;
+  const intakeType = product?.intakeType || 'full';
+  const shouldRenderAddonForm = intakeType === 'addon';
   
   // All hooks must be called before any conditional returns
   const [activeStep, setActiveStep] = useState(0);
@@ -208,13 +237,16 @@ function IntakeForm() {
       }
 
       // Step 2: Create or update user
+      // Use normalized product type from productConfig if available
+      const productTypeToSave = product?.productType || productParam || null;
+      
       if (!existingUsers || existingUsers.length === 0) {
         const { data: newUser, error: insertUserError } = await supabase
           .from('users')
           .insert([
             {
               email: email,
-              product_type: productParam || null,
+              product_type: productTypeToSave,
               intake_complete: true,
               created_at: new Date().toISOString(),
             },
@@ -243,7 +275,7 @@ function IntakeForm() {
         const { error: updateUserError } = await supabase
           .from('users')
           .update({
-            product_type: productParam || null,
+            product_type: productTypeToSave,
             intake_complete: true,
           })
           .eq('id', userId);
@@ -855,7 +887,7 @@ function IntakeForm() {
 
   // If it's an addon, render the AddOnIntakeForm component
   // This must be after all hooks are declared
-  if (isAddon) {
+  if (shouldRenderAddonForm) {
     return <AddOnIntakeForm />;
   }
 

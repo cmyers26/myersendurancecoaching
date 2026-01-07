@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import {
@@ -8,146 +8,137 @@ import {
   Box,
   Paper,
   Divider,
-  List,
-  ListItem,
-  ListItemText,
   Alert,
+  CircularProgress,
 } from '@mui/material';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-
-const productConfig = {
-  'pdf-5k': {
-    name: '5K Training Plan',
-    type: 'Downloadable Plan',
-    price: 29,
-    features: [
-      '12-week structured plan',
-      'Beginner to intermediate',
-      'PDF download',
-    ],
-  },
-  'pdf-10k': {
-    name: '10K Training Plan',
-    type: 'Downloadable Plan',
-    price: 35,
-    features: [
-      '12-week structured plan',
-      'Beginner to intermediate',
-      'PDF download',
-    ],
-  },
-  'pdf-half': {
-    name: 'Half Marathon Plan',
-    type: 'Downloadable Plan',
-    price: 49,
-    features: [
-      '16-week structured plan',
-      'Intermediate to advanced',
-      'PDF download',
-    ],
-  },
-  'pdf-marathon': {
-    name: 'Marathon Plan',
-    type: 'Downloadable Plan',
-    price: 69,
-    features: [
-      '20-week structured plan',
-      'Intermediate to advanced',
-      'PDF download',
-    ],
-  },
-  level1: {
-    name: 'Bronze - Essential Coaching',
-    type: 'Monthly Coaching',
-    price: 99,
-    features: [
-      'Customized training plan',
-      'Monthly plan updates',
-      'Email support',
-    ],
-  },
-  level2: {
-    name: 'Silver - Premium Coaching',
-    type: 'Monthly Coaching',
-    price: 179,
-    features: [
-      'Everything in Bronze',
-      'Bi-weekly plan adjustments',
-      'Weekly check-ins',
-      'Form analysis & feedback',
-    ],
-  },
-  level3: {
-    name: 'Gold - Elite Virtual 1-on-1 Coaching',
-    type: 'Monthly Coaching',
-    price: 299,
-    features: [
-      'Everything in Silver',
-      'Weekly 1-on-1 video calls',
-      'Real-time plan adjustments',
-      'Priority support',
-      'Nutrition & recovery guidance',
-    ],
-  },
-  'addon-strength': {
-    name: 'Strength Training Program',
-    type: 'Add-On',
-    price: 49,
-    pricingUnit: '/month',
-    features: [
-      'Runner-specific exercises',
-      '2-3 sessions per week',
-      'Mobility work & progressions',
-    ],
-  },
-  'addon-race-strategy': {
-    name: 'Race Strategy Consultation',
-    type: 'Add-On',
-    price: 99,
-    pricingUnit: '/session',
-    features: [
-      '60-minute strategy session',
-      'Personalized pacing plan',
-      'Written race strategy document',
-    ],
-  },
-};
+import { supabase } from '../lib/supabase';
+import { validateProductType } from '../lib/productValidation';
 
 function Checkout() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { selectedPlan, setSelectedPlan, setIsAuthenticated } = useAppContext();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
   // Read productType from query parameter "product"
   const productTypeParam = searchParams.get('product');
   
-  // Use productType from query params if selectedPlan is not set
-  const currentProductType = selectedPlan || productTypeParam;
-  const product = productConfig[currentProductType];
+  // Validate product type using utility function
+  const validationResult = useMemo(() => {
+    const rawType = selectedPlan || productTypeParam;
+    return validateProductType(rawType);
+  }, [selectedPlan, productTypeParam]);
+
+  const { isValid: isValidProduct, product, errorMessage: validationError } = validationResult;
 
   useEffect(() => {
     // If productType is in query params but selectedPlan is not set, set it in context
-    if (productTypeParam && !selectedPlan && productConfig[productTypeParam]) {
+    if (productTypeParam && !selectedPlan && isValidProduct) {
       setSelectedPlan(productTypeParam);
     }
-    // If no productType is selected and no productType in query params, redirect to pricing
-    if (!currentProductType || !product) {
+    // If no valid productType, redirect to pricing
+    if (!isValidProduct) {
       navigate('/pricing');
     }
-  }, [currentProductType, product, navigate, productTypeParam, selectedPlan, setSelectedPlan]);
+  }, [isValidProduct, navigate, productTypeParam, selectedPlan, setSelectedPlan]);
 
-  const handleCompletePurchase = () => {
-    setIsAuthenticated(true);
-    // Include product query parameter in the navigation
-    const productType = currentProductType || productTypeParam;
-    if (productType) {
-      navigate(`/intake?product=${productType}`);
-    } else {
-      navigate('/intake');
+  const handleCompletePurchase = async () => {
+    // Validate product before proceeding
+    if (!isValidProduct || !product) {
+      setSubmitError(validationError || 'Invalid product. Please select a valid product to continue.');
+      return;
+    }
+    
+    setIsSubmitting(true);
+    setSubmitError('');
+
+    try {
+      // Check if we're in local development mode without Vercel
+      const isDevelopment = process.env.NODE_ENV === 'development';
+      const skipStripe = isDevelopment && window.location.hostname === 'localhost';
+
+      if (skipStripe) {
+        // Development mode: Skip Stripe and go straight to intake
+        console.warn('⚠️ Development mode: Skipping Stripe checkout. Use "vercel dev" to test Stripe integration.');
+        setIsAuthenticated(true);
+        const productType = productTypeParam || selectedPlan;
+        navigate(`/intake?product=${productType}`);
+        return;
+      }
+
+      // Get Stripe price ID and billing type from productConfig
+      const stripePriceId = product.stripePriceId;
+      const billingType = product.billingType;
+
+      // Additional validation (should not happen if validateProductType worked correctly)
+      if (!stripePriceId) {
+        throw new Error('Stripe price ID not found for this product. Please contact support.');
+      }
+
+      // Create order record with product_type and status
+      const { error: insertError } = await supabase
+        .from('orders')
+        .insert([
+          {
+            product_type: product.productType,
+            status: 'pending',
+            created_at: new Date().toISOString(),
+          },
+        ]);
+
+      if (insertError) {
+        console.error('Order insert error:', insertError);
+        if (
+          insertError.message.includes('row-level security') ||
+          insertError.message.includes('RLS') ||
+          insertError.code === '42501'
+        ) {
+          throw new Error(
+            `RLS Policy Error: ${insertError.message}. Please verify that an INSERT policy exists for the 'orders' table. Error code: ${insertError.code || 'N/A'}`
+          );
+        }
+        throw new Error(`Failed to create order: ${insertError.message} (Code: ${insertError.code || 'N/A'})`);
+      }
+
+      // Call backend to create Stripe checkout session
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          priceId: stripePriceId,
+          billingType: billingType,
+          productType: product.productType,
+          successUrl: `${window.location.origin}/intake?product=${encodeURIComponent(productTypeParam || selectedPlan || '')}`,
+          cancelUrl: `${window.location.origin}/checkout?product=${encodeURIComponent(productTypeParam || selectedPlan || '')}`,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ message: 'Failed to create checkout session' }));
+        throw new Error(errorData.message || `Server error: ${response.status}`);
+      }
+
+      const { url: checkoutUrl } = await response.json();
+
+      if (!checkoutUrl) {
+        throw new Error('No checkout URL returned from server');
+      }
+
+      // Redirect to Stripe checkout
+      window.location.href = checkoutUrl;
+    } catch (error) {
+      console.error('Error submitting checkout:', error);
+      setSubmitError(
+        error.message || 'An error occurred while processing your order. Please try again.'
+      );
+      setIsSubmitting(false);
     }
   };
 
-  if (!product) {
+  if (!isValidProduct) {
     return null; // Will redirect in useEffect
   }
 
@@ -201,22 +192,9 @@ function Checkout() {
                 {product.name}
               </Typography>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                {product.type}
+                {product.description}
               </Typography>
               <Divider sx={{ my: 2 }} />
-              <List dense>
-                {product.features.map((feature, index) => (
-                  <ListItem key={index} disablePadding sx={{ py: 0.5 }}>
-                    <CheckCircleIcon
-                      sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
-                    />
-                    <ListItemText
-                      primary={feature}
-                      primaryTypographyProps={{ variant: 'body2' }}
-                    />
-                  </ListItem>
-                ))}
-              </List>
             </Box>
 
             <Divider sx={{ my: 3 }} />
@@ -237,27 +215,23 @@ function Checkout() {
                 component="span"
                 sx={{ fontWeight: 600, color: 'primary.main' }}
               >
-                ${product.price}
-                {product.type === 'Monthly Coaching' && (
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    color="text.secondary"
-                    sx={{ ml: 1, fontWeight: 400 }}
-                  >
-                    /month
-                  </Typography>
-                )}
+                {product.priceDisplay}
               </Typography>
             </Box>
 
             <Alert severity="info" sx={{ mb: 3 }}>
-              {product.type === 'Downloadable Plan'
-                ? 'You will receive a download link via email after purchase. Please allow 2-3 days for the plan to be formulated by Coach Chad and delivered.'
-                : product.type === 'Add-On'
-                ? 'Your add-on service will be activated after purchase. Coach Chad will reach out to you via email to coordinate the details.'
+              {product.billingType === 'one_time'
+                ? product.intakeType === 'addon'
+                  ? 'Your add-on service will be activated after purchase. Coach Chad will reach out to you via email to coordinate the details.'
+                  : 'You will receive a download link via email after purchase. Please allow 2-3 days for the plan to be formulated by Coach Chad and delivered.'
                 : 'Your coaching subscription will begin immediately after purchase. Coach Chad will reach out to you via email to schedule an onboarding call.'}
             </Alert>
+
+            {submitError && (
+              <Alert severity="error" sx={{ mb: 3 }}>
+                {submitError}
+              </Alert>
+            )}
 
             <Button
               variant="contained"
@@ -265,12 +239,20 @@ function Checkout() {
               fullWidth
               size="large"
               onClick={handleCompletePurchase}
+              disabled={!isValidProduct || isSubmitting}
               sx={{
                 py: 1.5,
                 fontSize: '1.1rem',
               }}
             >
-              Complete Purchase
+              {isSubmitting ? (
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <CircularProgress size={20} color="inherit" />
+                  Processing...
+                </Box>
+              ) : (
+                'Complete Purchase'
+              )}
             </Button>
 
             <Typography

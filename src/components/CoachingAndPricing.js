@@ -1,6 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
+import { productConfig } from '../config/productConfig';
+import { productFeatures } from '../config/productFeatures';
+import { normalizeProductType } from '../lib/productValidation';
 import {
   Container,
   Typography,
@@ -17,6 +20,11 @@ import {
 } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
+// Product keys organized by section (using old format for handlePlanSelect compatibility)
+const PDF_PLANS = ['pdf-5k', 'pdf-10k', 'pdf-half', 'pdf-marathon'];
+const COACHING_TIERS = ['level1', 'level2', 'level3'];
+const ADD_ONS = ['addon-strength', 'addon-race-strategy'];
+
 function CoachingAndPricing() {
   const navigate = useNavigate();
   const { setSelectedPlan } = useAppContext();
@@ -25,6 +33,140 @@ function CoachingAndPricing() {
   const handlePlanSelect = (planName) => {
     setSelectedPlan(planName);
     navigate(`/checkout?product=${planName}`);
+  };
+
+  // Helper to get product data (normalizes key and retrieves from config)
+  const getProductData = (oldKey) => {
+    const normalizedKey = normalizeProductType(oldKey);
+    return normalizedKey ? productConfig[normalizedKey] : null;
+  };
+
+  // Helper to get product features
+  const getProductFeatures = (oldKey) => {
+    const normalizedKey = normalizeProductType(oldKey);
+    return normalizedKey ? productFeatures[normalizedKey] || [] : [];
+  };
+
+  // Render a product card
+  const renderProductCard = (oldKey, options = {}) => {
+    const product = getProductData(oldKey);
+    const features = getProductFeatures(oldKey);
+    
+    if (!product) return null;
+
+    const {
+      isPopular = false,
+      buttonText = 'Get Started',
+      cardElevation = 2,
+      showBorder = false,
+    } = options;
+
+    return (
+      <Grid item xs={12} sm={6} md={4} key={oldKey}>
+        <Card
+          elevation={cardElevation}
+          sx={{
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            position: 'relative',
+            ...(showBorder && {
+              border: '2px solid',
+              borderColor: 'primary.main',
+            }),
+            transition: 'transform 0.2s, box-shadow 0.2s',
+            '&:hover': {
+              transform: 'translateY(-4px)',
+              boxShadow: cardElevation + 2,
+            },
+          }}
+        >
+          {isPopular && (
+            <Chip
+              label="Most Popular"
+              color="primary"
+              sx={{
+                position: 'absolute',
+                top: 16,
+                right: 16,
+                fontWeight: 600,
+                zIndex: 1,
+              }}
+            />
+          )}
+          <CardContent sx={{ flexGrow: 1, p: 3, ...(isPopular && { pt: 5 }) }}>
+            <Typography variant="h5" component="h3" gutterBottom>
+              {product.name.split(' - ')[0]}
+            </Typography>
+            {product.name.includes(' - ') && (
+              <Typography
+                variant={isPopular ? 'h6' : 'subtitle1'}
+                color={isPopular ? 'primary.main' : 'text.secondary'}
+                gutterBottom
+                sx={{ mb: 2, fontWeight: isPopular ? 600 : 400 }}
+              >
+                {product.name.split(' - ')[1]}
+              </Typography>
+            )}
+            <Box sx={{ my: 2 }}>
+              {product.priceDisplay.includes('/') ? (
+                <>
+                  <Typography
+                    variant="h4"
+                    component="span"
+                    sx={{ fontWeight: 600 }}
+                  >
+                    {product.priceDisplay.split('/')[0]}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    component="span"
+                    sx={{ ml: 1 }}
+                  >
+                    /{product.priceDisplay.split('/')[1]}
+                  </Typography>
+                </>
+              ) : (
+                <Typography
+                  variant="h4"
+                  component="span"
+                  sx={{ fontWeight: 600 }}
+                >
+                  {product.priceDisplay}
+                </Typography>
+              )}
+            </Box>
+            <Divider sx={{ my: 2 }} />
+            {features.length > 0 && (
+              <List dense>
+                {features.map((feature, index) => (
+                  <ListItem key={index} disablePadding sx={{ py: 0.5 }}>
+                    <CheckCircleIcon
+                      sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
+                    />
+                    <ListItemText
+                      primary={feature}
+                      primaryTypographyProps={{ variant: 'body2' }}
+                    />
+                  </ListItem>
+                ))}
+              </List>
+            )}
+            <Button
+              variant={oldKey.startsWith('pdf') || oldKey.startsWith('addon') ? 'outlined' : 'contained'}
+              color="primary"
+              fullWidth
+              size={isPopular ? 'large' : 'medium'}
+              onClick={() => handlePlanSelect(oldKey)}
+              sx={{ mt: 3, ...(isPopular && { py: 1.5 }) }}
+            >
+              {buttonText}
+            </Button>
+          </CardContent>
+        </Card>
+      </Grid>
+    );
   };
   return (
     <>
@@ -94,226 +236,11 @@ function CoachingAndPricing() {
             support. Each plan is designed based on your individual running experience and goals.
           </Typography>
           <Grid container spacing={4} justifyContent="center">
-            <Grid item xs={12} sm={6} md={4}>
-              <Card
-                elevation={2}
-                sx={{
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  position: 'relative',
-                }}
-              >
-                <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                  <Typography variant="h5" component="h3" gutterBottom>
-                    5K Training Plan
-                  </Typography>
-                  <Box sx={{ my: 2 }}>
-                    <Typography
-                      variant="h4"
-                      component="span"
-                      sx={{ fontWeight: 600 }}
-                    >
-                      $29
-                    </Typography>
-                  </Box>
-                  <List dense>
-                    <ListItem disablePadding>
-                      <ListItemText
-                        primary="12-week structured plan"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                    <ListItem disablePadding>
-                      <ListItemText
-                        primary="Beginner to intermediate"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                    <ListItem disablePadding>
-                      <ListItemText
-                        primary="PDF download"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                  </List>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    fullWidth
-                    onClick={() => handlePlanSelect('pdf-5k')}
-                    sx={{ mt: 3 }}
-                  >
-                    Purchase Plan
-                  </Button>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Card
-                elevation={2}
-                sx={{
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  position: 'relative',
-                }}
-              >
-                <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                  <Typography variant="h5" component="h3" gutterBottom>
-                    10K Training Plan
-                  </Typography>
-                  <Box sx={{ my: 2 }}>
-                    <Typography
-                      variant="h4"
-                      component="span"
-                      sx={{ fontWeight: 600 }}
-                    >
-                      $35
-                    </Typography>
-                  </Box>
-                  <List dense>
-                    <ListItem disablePadding>
-                      <ListItemText
-                        primary="12-week structured plan"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                    <ListItem disablePadding>
-                      <ListItemText
-                        primary="Beginner to intermediate"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                    <ListItem disablePadding>
-                      <ListItemText
-                        primary="PDF download"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                  </List>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    fullWidth
-                    onClick={() => handlePlanSelect('pdf-10k')}
-                    sx={{ mt: 3 }}
-                  >
-                    Purchase Plan
-                  </Button>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Card
-                elevation={2}
-                sx={{
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  position: 'relative',
-                }}
-              >
-                <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                  <Typography variant="h5" component="h3" gutterBottom>
-                    Half Marathon Plan
-                  </Typography>
-                  <Box sx={{ my: 2 }}>
-                    <Typography
-                      variant="h4"
-                      component="span"
-                      sx={{ fontWeight: 600 }}
-                    >
-                      $49
-                    </Typography>
-                  </Box>
-                  <List dense>
-                    <ListItem disablePadding>
-                      <ListItemText
-                        primary="16-week structured plan"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                    <ListItem disablePadding>
-                      <ListItemText
-                        primary="Intermediate to advanced"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                    <ListItem disablePadding>
-                      <ListItemText
-                        primary="PDF download"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                  </List>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    fullWidth
-                    onClick={() => handlePlanSelect('pdf-half')}
-                    sx={{ mt: 3 }}
-                  >
-                    Purchase Plan
-                  </Button>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <Card
-                elevation={2}
-                sx={{
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  position: 'relative',
-                }}
-              >
-                <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                  <Typography variant="h5" component="h3" gutterBottom>
-                    Marathon Plan
-                  </Typography>
-                  <Box sx={{ my: 2 }}>
-                    <Typography
-                      variant="h4"
-                      component="span"
-                      sx={{ fontWeight: 600 }}
-                    >
-                      $69
-                    </Typography>
-                  </Box>
-                  <List dense>
-                    <ListItem disablePadding>
-                      <ListItemText
-                        primary="20-week structured plan"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                    <ListItem disablePadding>
-                      <ListItemText
-                        primary="Intermediate to advanced"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                    <ListItem disablePadding>
-                      <ListItemText
-                        primary="PDF download"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                  </List>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    fullWidth
-                    onClick={() => handlePlanSelect('pdf-marathon')}
-                    sx={{ mt: 3 }}
-                  >
-                    Purchase Plan
-                  </Button>
-                </CardContent>
-              </Card>
-            </Grid>
+            {PDF_PLANS.map((planKey) =>
+              renderProductCard(planKey, {
+                buttonText: 'Purchase Plan',
+              })
+            )}
           </Grid>
         </Container>
       </Box>
@@ -337,307 +264,13 @@ function CoachingAndPricing() {
             Personalized Coaching Tiers
           </Typography>
           <Grid container spacing={4} justifyContent="center">
-            {/* Bronze */}
-            <Grid item xs={12} md={4}>
-              <Card
-                elevation={2}
-                sx={{
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  transition: 'transform 0.2s, box-shadow 0.2s',
-                  '&:hover': {
-                    transform: 'translateY(-4px)',
-                    boxShadow: 4,
-                  },
-                }}
-              >
-                <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                  <Typography variant="h5" component="h3" gutterBottom>
-                    Bronze
-                  </Typography>
-                  <Typography
-                    variant="subtitle1"
-                    color="text.secondary"
-                    gutterBottom
-                    sx={{ mb: 2 }}
-                  >
-                    Essential Coaching
-                  </Typography>
-                  <Box sx={{ my: 2 }}>
-                    <Typography
-                      variant="h4"
-                      component="span"
-                      sx={{ fontWeight: 600 }}
-                    >
-                      $99
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      component="span"
-                      sx={{ ml: 1 }}
-                    >
-                      /month
-                    </Typography>
-                  </Box>
-                  <Divider sx={{ my: 2 }} />
-                  <List dense>
-                    <ListItem disablePadding sx={{ py: 0.5 }}>
-                      <CheckCircleIcon
-                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
-                      />
-                      <ListItemText
-                        primary="Customized training plan"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                    <ListItem disablePadding sx={{ py: 0.5 }}>
-                      <CheckCircleIcon
-                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
-                      />
-                      <ListItemText
-                        primary="Monthly plan updates"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                    <ListItem disablePadding sx={{ py: 0.5 }}>
-                      <CheckCircleIcon
-                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
-                      />
-                      <ListItemText
-                        primary="Email support"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                  </List>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                    onClick={() => handlePlanSelect('level1')}
-                    sx={{ mt: 3 }}
-                  >
-                    Get Started
-                  </Button>
-                </CardContent>
-              </Card>
-            </Grid>
-
-            {/* Silver */}
-            <Grid item xs={12} md={4}>
-              <Card
-                elevation={2}
-                sx={{
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  transition: 'transform 0.2s, box-shadow 0.2s',
-                  '&:hover': {
-                    transform: 'translateY(-4px)',
-                    boxShadow: 4,
-                  },
-                }}
-              >
-                <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                  <Typography variant="h5" component="h3" gutterBottom>
-                    Silver
-                  </Typography>
-                  <Typography
-                    variant="subtitle1"
-                    color="text.secondary"
-                    gutterBottom
-                    sx={{ mb: 2 }}
-                  >
-                    Premium Coaching
-                  </Typography>
-                  <Box sx={{ my: 2 }}>
-                    <Typography
-                      variant="h4"
-                      component="span"
-                      sx={{ fontWeight: 600 }}
-                    >
-                      $179
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      component="span"
-                      sx={{ ml: 1 }}
-                    >
-                      /month
-                    </Typography>
-                  </Box>
-                  <Divider sx={{ my: 2 }} />
-                  <List dense>
-                    <ListItem disablePadding sx={{ py: 0.5 }}>
-                      <CheckCircleIcon
-                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
-                      />
-                      <ListItemText
-                        primary="Everything in Bronze"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                    <ListItem disablePadding sx={{ py: 0.5 }}>
-                      <CheckCircleIcon
-                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
-                      />
-                      <ListItemText
-                        primary="Bi-weekly plan adjustments"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                    <ListItem disablePadding sx={{ py: 0.5 }}>
-                      <CheckCircleIcon
-                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
-                      />
-                      <ListItemText
-                        primary="Weekly phone check-ins"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                    <ListItem disablePadding sx={{ py: 0.5 }}>
-                      <CheckCircleIcon
-                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
-                      />
-                      <ListItemText
-                        primary="Form analysis & feedback"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                  </List>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                    onClick={() => handlePlanSelect('level2')}
-                    sx={{ mt: 3 }}
-                  >
-                    Get Started
-                  </Button>
-                </CardContent>
-              </Card>
-            </Grid>
-
-            {/* Gold - Elite */}
-            <Grid item xs={12} md={4}>
-              <Card
-                elevation={4}
-                sx={{
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  position: 'relative',
-                  border: '2px solid',
-                  borderColor: 'primary.main',
-                  transition: 'transform 0.2s, box-shadow 0.2s',
-                  '&:hover': {
-                    transform: 'translateY(-4px)',
-                    boxShadow: 6,
-                  },
-                }}
-              >
-                <Chip
-                  label="Most Popular"
-                  color="primary"
-                  sx={{
-                    position: 'absolute',
-                    top: 16,
-                    right: 16,
-                    fontWeight: 600,
-                  }}
-                />
-                <CardContent sx={{ flexGrow: 1, p: 3, pt: 5 }}>
-                  <Typography variant="h5" component="h3" gutterBottom>
-                    Gold
-                  </Typography>
-                  <Typography
-                    variant="h6"
-                    color="primary.main"
-                    gutterBottom
-                    sx={{ mb: 2, fontWeight: 600 }}
-                  >
-                    Elite Virtual 1-on-1 Coaching
-                  </Typography>
-                  <Box sx={{ my: 2 }}>
-                    <Typography
-                      variant="h4"
-                      component="span"
-                      sx={{ fontWeight: 600 }}
-                    >
-                      $299
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      component="span"
-                      sx={{ ml: 1 }}
-                    >
-                      /month
-                    </Typography>
-                  </Box>
-                  <Divider sx={{ my: 2 }} />
-                  <List dense>
-                    <ListItem disablePadding sx={{ py: 0.5 }}>
-                      <CheckCircleIcon
-                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
-                      />
-                      <ListItemText
-                        primary="Everything in Silver"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                    <ListItem disablePadding sx={{ py: 0.5 }}>
-                      <CheckCircleIcon
-                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
-                      />
-                      <ListItemText
-                        primary="Weekly 1-on-1 video calls"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                    <ListItem disablePadding sx={{ py: 0.5 }}>
-                      <CheckCircleIcon
-                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
-                      />
-                      <ListItemText
-                        primary="Real-time plan adjustments"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                    <ListItem disablePadding sx={{ py: 0.5 }}>
-                      <CheckCircleIcon
-                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
-                      />
-                      <ListItemText
-                        primary="Priority support"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                    <ListItem disablePadding sx={{ py: 0.5 }}>
-                      <CheckCircleIcon
-                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
-                      />
-                      <ListItemText
-                        primary="Nutrition & recovery guidance"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                  </List>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    fullWidth
-                    size="large"
-                    onClick={() => handlePlanSelect('level3')}
-                    sx={{ mt: 3, py: 1.5 }}
-                  >
-                    Get Started
-                  </Button>
-                </CardContent>
-              </Card>
-            </Grid>
+            {COACHING_TIERS.map((tierKey, index) =>
+              renderProductCard(tierKey, {
+                isPopular: index === 2, // level3 is most popular
+                cardElevation: index === 2 ? 4 : 2,
+                showBorder: index === 2,
+              })
+            )}
           </Grid>
         </Container>
       </Box>
@@ -676,7 +309,10 @@ function CoachingAndPricing() {
               justifyContent: 'center',
             }}
           >
-            <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 50%' }, maxWidth: { md: '500px' } }}>
+            {ADD_ONS.map((addonKey) => {
+              const product = getProductData(addonKey);
+              return (
+                <Box key={addonKey} sx={{ flex: { xs: '1 1 100%', md: '1 1 50%' }, maxWidth: { md: '500px' } }}>
               <Card
                 elevation={2}
                 sx={{
@@ -688,15 +324,17 @@ function CoachingAndPricing() {
               >
                 <CardContent sx={{ flexGrow: 1, p: 3 }}>
                   <Typography variant="h5" component="h3" gutterBottom>
-                    Strength Training Program
+                        {product?.name}
                   </Typography>
                   <Box sx={{ my: 2 }}>
+                        {product?.priceDisplay.includes('/') ? (
+                          <>
                     <Typography
                       variant="h4"
                       component="span"
                       sx={{ fontWeight: 600 }}
                     >
-                      $49
+                              {product.priceDisplay.split('/')[0]}
                     </Typography>
                     <Typography
                       variant="body2"
@@ -704,132 +342,49 @@ function CoachingAndPricing() {
                       component="span"
                       sx={{ ml: 1 }}
                     >
-                      /month
+                              /{product.priceDisplay.split('/')[1]}
                     </Typography>
-                  </Box>
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                    Comprehensive strength training program designed specifically
-                    for runners. Includes exercises, progressions, mobility work to improve power, prevent injury, and enhance running
-                    performance.
-                  </Typography>
-                  <List dense>
-                    <ListItem disablePadding sx={{ py: 0.5 }}>
-                      <CheckCircleIcon
-                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
-                      />
-                      <ListItemText
-                        primary="Runner-specific exercises"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                    <ListItem disablePadding sx={{ py: 0.5 }}>
-                      <CheckCircleIcon
-                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
-                      />
-                      <ListItemText
-                        primary="2-3 sessions per week"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                    <ListItem disablePadding sx={{ py: 0.5 }}>
-                      <CheckCircleIcon
-                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
-                      />
-                      <ListItemText
-                        primary="mobility work & progressions"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                  </List>
-                  <Button
-                    variant="outlined"
-                    color="primary"
-                    fullWidth
-                    onClick={() => handlePlanSelect('addon-strength')}
-                    sx={{ mt: 3 }}
-                  >
-                    Add Strength Training
-                  </Button>
-                </CardContent>
-              </Card>
-            </Box>
-            <Box sx={{ flex: { xs: '1 1 100%', md: '1 1 50%' }, maxWidth: { md: '500px' } }}>
-              <Card
-                elevation={2}
-                sx={{
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  position: 'relative',
-                }}
-              >
-                <CardContent sx={{ flexGrow: 1, p: 3 }}>
-                  <Typography variant="h5" component="h3" gutterBottom>
-                    Race Strategy Consultation
-                  </Typography>
-                  <Box sx={{ my: 2 }}>
+                          </>
+                        ) : (
                     <Typography
                       variant="h4"
                       component="span"
                       sx={{ fontWeight: 600 }}
                     >
-                      $99
+                            {product?.priceDisplay}
                     </Typography>
-                    <Typography
-                      variant="body2"
-                      color="text.secondary"
-                      component="span"
-                      sx={{ ml: 1 }}
-                    >
-                      /session
-                    </Typography>
+                        )}
                   </Box>
                   <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                    One-on-one race strategy session to develop a personalized
-                    race plan. Includes pacing strategy, nutrition plan, mental
-                    preparation, and course-specific tactics for your target race.
+                        {product?.description}
                   </Typography>
                   <List dense>
-                    <ListItem disablePadding sx={{ py: 0.5 }}>
+                        {getProductFeatures(addonKey).map((feature, index) => (
+                          <ListItem key={index} disablePadding sx={{ py: 0.5 }}>
                       <CheckCircleIcon
                         sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
                       />
                       <ListItemText
-                        primary="60-minute strategy session"
+                              primary={feature}
                         primaryTypographyProps={{ variant: 'body2' }}
                       />
                     </ListItem>
-                    <ListItem disablePadding sx={{ py: 0.5 }}>
-                      <CheckCircleIcon
-                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
-                      />
-                      <ListItemText
-                        primary="Personalized pacing plan"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
-                    <ListItem disablePadding sx={{ py: 0.5 }}>
-                      <CheckCircleIcon
-                        sx={{ color: 'primary.main', fontSize: 20, mr: 1 }}
-                      />
-                      <ListItemText
-                        primary="Written race strategy document"
-                        primaryTypographyProps={{ variant: 'body2' }}
-                      />
-                    </ListItem>
+                        ))}
                   </List>
                   <Button
                     variant="outlined"
                     color="primary"
                     fullWidth
-                    onClick={() => handlePlanSelect('addon-race-strategy')}
+                        onClick={() => handlePlanSelect(addonKey)}
                     sx={{ mt: 3 }}
                   >
-                    Book Consultation
+                        {addonKey === 'addon-strength' ? 'Add Strength Training' : 'Book Consultation'}
                   </Button>
                 </CardContent>
               </Card>
             </Box>
+              );
+            })}
           </Box>
         </Container>
       </Box>

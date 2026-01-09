@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import React, { useState, useMemo, useEffect } from 'react';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import { productConfig } from '../config/productConfig';
 import {
@@ -35,6 +35,7 @@ const normalizeProductType = (productType) => {
 
 function AddOnIntakeForm() {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const productParam = searchParams.get('product');
   
   // Normalize and validate product type
@@ -57,6 +58,14 @@ function AddOnIntakeForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState(false);
+
+  // Protect intake form - only accessible after checkout with valid product
+  useEffect(() => {
+    if (!productParam || !product) {
+      // Redirect to pricing if no product or invalid product
+      navigate('/pricing', { replace: true });
+    }
+  }, [productParam, product, navigate]);
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -226,14 +235,10 @@ function AddOnIntakeForm() {
 
       setSubmitSuccess(true);
       
-      // Clear form
-      setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
-        notes: '',
-      });
+      // Redirect to success page after brief delay
+      setTimeout(() => {
+        navigate(`/checkout/success?product=${encodeURIComponent(productParam || '')}`);
+      }, 2000);
     } catch (error) {
       console.error('Error submitting form:', error);
       setSubmitError(

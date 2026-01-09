@@ -60,7 +60,7 @@ function Home() {
               variant="contained"
               color="primary"
               size="large"
-              onClick={() => navigate('/get-started')}
+              onClick={() => navigate('/pricing')}
               sx={{
                 px: 4,
                 py: 1.5,
@@ -401,7 +401,7 @@ function Home() {
             <Button
               variant="contained"
               size="large"
-              href="/intake"
+              href="/pricing"
               sx={{
                 px: 4,
                 py: 1.5,
@@ -413,7 +413,7 @@ function Home() {
                 },
               }}
             >
-              Complete Intake Form
+              Get Started With Coaching
             </Button>
           </Box>
         </Container>

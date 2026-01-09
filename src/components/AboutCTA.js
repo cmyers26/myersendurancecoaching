@@ -60,7 +60,7 @@ function AboutCTA() {
               variant="contained"
               color="primary"
               size="large"
-              onClick={() => navigate('/get-started')}
+              onClick={() => navigate('/pricing')}
               sx={{
                 px: 4,
                 py: 1.5,

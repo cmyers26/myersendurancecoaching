@@ -42,13 +42,23 @@ function CoachingHighlightsSection() {
       ],
     },
     {
-      title: 'Fairfield Union High School - Assistant Coach under Rob Myers',
+      title: 'Personal Online Coaching',
+      subtitle: 'Worked with Columbus Running Company as their personal online coach',
+      highlights: [
+        'Worked with athletes from all over',
+        'Coached athletes to achieve their personal bests',
+        'Coached athletes to achieve their goals',
+        'Coached athletes to run 5ks, 10ks, half marathons, and marathons',
+      ],
+    },
+    {
+      title: 'Fairfield Union High School - Assistant Coach under Head Coach Rob Myers',
       subtitle: 'Current Program over the past 4 years',
       highlights: [
-        'Division II State Championship (Boys Cross Country)',
-        '2 individual state champion titles (one boy)',
-        '4 top-10 boys team finishes',
-        '2 top-13 girls finishes',
+        'Helped lead the boys team to a Division II State Championship (Boys Cross Country)',
+        'Helped guide 2 individual state champion titles (one boy)',
+        'Helped the boys team to 4 top-10 finishes',
+        'Helped the girls team to 2 top-13 finishes',
       ],
     },
   ];
@@ -80,7 +90,7 @@ function CoachingHighlightsSection() {
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
-                  maxWidth: '500px',
+                  maxWidth: '400px',
                   width: '100%',
                   mx: 'auto',
                   transition: 'transform 0.2s, box-shadow 0.2s',

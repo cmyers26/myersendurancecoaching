@@ -8,9 +8,9 @@ import HowItWorks from './components/HowItWorks';
 import About from './components/About';
 import Contact from './components/Contact';
 import IntakeForm from './components/IntakeForm';
-import GetStarted from './components/GetStarted';
 import Checkout from './components/Checkout';
-import OnboardingIntake from './components/OnboardingIntake';
+import CheckoutSuccess from './components/CheckoutSuccess';
+import CheckoutCancel from './components/CheckoutCancel';
 import AthleteDashboard from './components/AthleteDashboard';
 import './App.css';
 
@@ -22,9 +22,9 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/pricing" element={<CoachingAndPricing />} />
-            <Route path="/get-started" element={<GetStarted />} />
             <Route path="/checkout" element={<Checkout />} />
-            <Route path="/onboarding/intake" element={<OnboardingIntake />} />
+            <Route path="/checkout/success" element={<CheckoutSuccess />} />
+            <Route path="/checkout/cancel" element={<CheckoutCancel />} />
             <Route
               path="/dashboard"
               element={

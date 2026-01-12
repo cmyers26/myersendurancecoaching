@@ -19,7 +19,24 @@
 .env.*
 !.env.example
 
+# Secret keys and credentials
+*.key
+*.pem
+*.p12
+*.pfx
+*.cert
+*.crt
+*secret*
+*credentials*
+*.keystore
+secrets/
+credentials/
+
+# Vercel
+.vercel
+
+# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-.vercel
+*.log

@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
+import { sendOwnerNotificationEmail } from './lib/email';
 
 // Initialize Stripe
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
@@ -266,6 +267,37 @@ async function handleCheckoutSessionCompleted(
           console.log('User created successfully');
         }
       }
+    }
+
+    // Send owner notification email
+    try {
+      console.log('Attempting to send owner notification email...');
+      
+      // Extract data for email
+      const customerEmail = session.customer_details?.email || session.customer_email || 'unknown@example.com';
+      const productType = session.metadata?.productType || 'unknown';
+      const amountTotal = session.amount_total || 0;
+
+      // Send notification
+      const emailResult = await sendOwnerNotificationEmail(
+        customerEmail,
+        productType,
+        amountTotal
+      );
+
+      if (emailResult.success) {
+        console.log('Owner notification email sent successfully');
+      } else {
+        console.error('Failed to send owner notification email:', emailResult.error);
+      }
+    } catch (emailError: any) {
+      // Log error but don't throw - we don't want email failures to break the webhook
+      console.error('Error sending owner notification email:', emailError);
+      console.error('Email error details:', {
+        message: emailError?.message,
+        stack: emailError?.stack
+      });
+      // Continue processing - email failure should not fail the webhook
     }
 
   } catch (error: any) {

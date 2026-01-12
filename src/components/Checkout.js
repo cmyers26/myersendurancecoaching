@@ -54,54 +54,19 @@ function Checkout() {
     setSubmitError('');
 
     try {
-      // Check if we're in local development mode without Vercel
-      const isDevelopment = process.env.NODE_ENV === 'development';
-      const skipStripe = isDevelopment && window.location.hostname === 'localhost';
-
-      if (skipStripe) {
-        // Development mode: Skip Stripe and go straight to intake
-        console.warn('⚠️ Development mode: Skipping Stripe checkout. Use "vercel dev" to test Stripe integration.');
-        setIsAuthenticated(true);
-        const productType = productTypeParam || selectedPlan;
-        navigate(`/intake?product=${productType}`);
-        return;
-      }
-
-      // Get Stripe price ID and billing type from productConfig
+      // Get Stripe price ID from productConfig
       const stripePriceId = product.stripePriceId;
-      const billingType = product.billingType;
+      const productType = product.productType;
 
-      // Additional validation (should not happen if validateProductType worked correctly)
       if (!stripePriceId) {
         throw new Error('Stripe price ID not found for this product. Please contact support.');
       }
 
-      // Create order record with product_type and status
-      const { error: insertError } = await supabase
-        .from('orders')
-        .insert([
-          {
-            product_type: product.productType,
-            status: 'pending',
-            created_at: new Date().toISOString(),
-          },
-        ]);
+      // Get user email from Supabase auth (if available)
+      const { data: { user } } = await supabase.auth.getUser();
+      const customerEmail = user?.email || '';
 
-      if (insertError) {
-        console.error('Order insert error:', insertError);
-        if (
-          insertError.message.includes('row-level security') ||
-          insertError.message.includes('RLS') ||
-          insertError.code === '42501'
-        ) {
-          throw new Error(
-            `RLS Policy Error: ${insertError.message}. Please verify that an INSERT policy exists for the 'orders' table. Error code: ${insertError.code || 'N/A'}`
-          );
-        }
-        throw new Error(`Failed to create order: ${insertError.message} (Code: ${insertError.code || 'N/A'})`);
-      }
-
-      // Call backend to create Stripe checkout session
+      // Call API to create Stripe checkout session
       const response = await fetch('/api/create-checkout-session', {
         method: 'POST',
         headers: {
@@ -109,28 +74,33 @@ function Checkout() {
         },
         body: JSON.stringify({
           priceId: stripePriceId,
-          billingType: billingType,
-          productType: product.productType,
-          successUrl: `${window.location.origin}/intake?product=${encodeURIComponent(productTypeParam || selectedPlan || '')}`,
-          cancelUrl: `${window.location.origin}/checkout?product=${encodeURIComponent(productTypeParam || selectedPlan || '')}`,
+          billingType: product.billingType,
+          productType: productType,
+          customerEmail: customerEmail,
+          successUrl: `${window.location.origin}/intake?product=${encodeURIComponent(productType)}`,
+          cancelUrl: `${window.location.origin}/checkout/cancel`,
         }),
       });
 
+      // Handle API errors
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ message: 'Failed to create checkout session' }));
+        const errorData = await response.json().catch(() => ({ 
+          message: 'Failed to create checkout session' 
+        }));
         throw new Error(errorData.message || `Server error: ${response.status}`);
       }
 
+      // Get checkout URL from response
       const { url: checkoutUrl } = await response.json();
 
       if (!checkoutUrl) {
         throw new Error('No checkout URL returned from server');
       }
 
-      // Redirect to Stripe checkout
+      // Redirect to Stripe Checkout URL directly
       window.location.href = checkoutUrl;
     } catch (error) {
-      console.error('Error submitting checkout:', error);
+      console.error('Checkout error:', error);
       setSubmitError(
         error.message || 'An error occurred while processing your order. Please try again.'
       );

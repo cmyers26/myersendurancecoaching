@@ -18,9 +18,9 @@ function RequireIntake({ children }) {
             <Button
               color="inherit"
               size="small"
-              onClick={() => navigate('/onboarding/intake')}
+              onClick={() => navigate('/pricing')}
             >
-              Complete Intake
+              View Plans
             </Button>
           }
           sx={{
@@ -30,7 +30,7 @@ function RequireIntake({ children }) {
             zIndex: 1000,
           }}
         >
-          Complete your intake to unlock your training plan
+          Purchase a coaching plan to access your training dashboard
         </Alert>
       )}
       {children}

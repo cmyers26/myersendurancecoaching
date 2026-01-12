@@ -37,7 +37,7 @@ export const productConfig = {
   strength_addon: {
     productType: 'strength_addon',
     name: 'Strength Training Program',
-    description: 'Comprehensive strength training program designed specifically for runners. Includes exercises, progressions, and mobility work to improve power, prevent injury, and enhance running performance.',
+    description: 'Comprehensive strength training program designed specifically for runners.',
     priceDisplay: '$49/month',
     billingType: 'recurring',
     stripePriceId: 'price_1SnNhBE7DJ6MCdeb9eW51JdB',
@@ -46,7 +46,7 @@ export const productConfig = {
   race_strategy_addon: {
     productType: 'race_strategy_addon',
     name: 'Race Strategy Consultation',
-    description: 'One-on-one race strategy session to develop a personalized race plan. Includes pacing strategy, nutrition plan, mental preparation, and course-specific tactics for your target race.',
+    description: '60-minute personalized race strategy session.',
     priceDisplay: '$99 one-time',
     billingType: 'one_time',
     stripePriceId: 'price_1SnNhdE7DJ6MCdebDhcsTOkN',
@@ -55,7 +55,7 @@ export const productConfig = {
   pdf_5k: {
     productType: 'pdf_5k',
     name: '5K Training Plan',
-    description: '12-week structured training plan for beginner to intermediate runners. Self-paced downloadable PDF plan you can follow at your own pace.',
+    description: '12-week structured training plan for beginner to intermediate runners.',
     priceDisplay: '$29',
     billingType: 'one_time',
     stripePriceId: 'price_1SnNi1E7DJ6MCdeb8cuE9bMv',
@@ -64,7 +64,7 @@ export const productConfig = {
   pdf_10k: {
     productType: 'pdf_10k',
     name: '10K Training Plan',
-    description: '12-week structured training plan to build endurance and speed for 10K success. Self-paced downloadable PDF plan you can follow at your own pace.',
+    description: '12-week structured training plan to build endurance and speed.',
     priceDisplay: '$29',
     billingType: 'one_time',
     stripePriceId: 'price_1SnNiWE7DJ6MCdebwAU7vGug',
@@ -73,7 +73,7 @@ export const productConfig = {
   pdf_half: {
     productType: 'pdf_half',
     name: 'Half Marathon Training Plan',
-    description: '16-week progressive training plan for half marathon success. Self-paced downloadable PDF plan you can follow at your own pace.',
+    description: '16-week progressive training plan for half marathon success.',
     priceDisplay: '$39',
     billingType: 'one_time',
     stripePriceId: 'price_1SnNiwE7DJ6MCdebqKqLQtzo',
@@ -82,10 +82,11 @@ export const productConfig = {
   pdf_marathon: {
     productType: 'pdf_marathon',
     name: 'Marathon Training Plan',
-    description: '20-week comprehensive marathon training plan for intermediate to advanced runners. Self-paced downloadable PDF plan you can follow at your own pace.',
+    description: '20-week comprehensive marathon training plan.',
     priceDisplay: '$49',
     billingType: 'one_time',
     stripePriceId: 'price_1SnNjNE7DJ6MCdeb1ALPA1MP',
     intakeType: 'full',
   },
 };
+

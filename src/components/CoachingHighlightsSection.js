@@ -32,16 +32,6 @@ function CoachingHighlightsSection() {
       ],
     },
     {
-      title: 'Professional Coaching',
-      subtitle: 'Working with Rob Myers',
-      highlights: [
-        'Coached during final years of professional career with Saucony',
-        '3-time Indoor National Champion in the 1500m',
-        '2-time World Championship team member',
-        'Personal bests: 3:53 (mile) and 3:34 (1500m)',
-      ],
-    },
-    {
       title: 'Personal Online Coaching',
       subtitle: 'Worked with Columbus Running Company as their personal online coach',
       highlights: [

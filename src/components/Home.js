@@ -249,7 +249,8 @@ function Home() {
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
                   Complete a detailed intake form about your running history,
-                  goals, and current fitness level.
+                  goals, and current fitness level. Once we have received your intake form,
+                  we will set up a call to discuss your goals and create a personalized training plan.
                 </Typography>
               </Paper>
             </Grid>

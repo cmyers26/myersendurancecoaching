@@ -39,9 +39,26 @@ function AppLayout({ children }) {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: 'center' }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
-        Myers Endurance Coaching
-      </Typography>
+      <Box
+        component={Link}
+        to="/"
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          my: 2,
+          textDecoration: 'none',
+        }}
+      >
+        <img
+          src="/images/myers-endurance-coaching-logo-mobile.png"
+          alt="Myers Endurance Coaching"
+          style={{
+            maxWidth: '120px',
+            height: 'auto',
+          }}
+        />
+      </Box>
       <List>
         {navigationLinks.map((link) => {
           const isExternal = link.path.startsWith('http');
@@ -73,7 +90,7 @@ function AppLayout({ children }) {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
       <AppBar position="static" elevation={0}>
-        <Toolbar>
+        <Toolbar sx={{ justifyContent: 'space-between' }}>
           {isMobile && (
             <IconButton
               color="inherit"
@@ -85,19 +102,26 @@ function AppLayout({ children }) {
               <MenuIcon />
             </IconButton>
           )}
-          <Typography
-            variant="h6"
+          <Box
             component={Link}
             to="/"
             sx={{
-              flexGrow: 1,
-              fontWeight: 500,
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              my: 2,
               textDecoration: 'none',
-              color: 'inherit',
             }}
           >
-            Myers Endurance Coaching
-          </Typography>
+            <img
+              src="/images/myers-endurance-coaching-logo.png"
+              alt="Myers Endurance Coaching"
+              style={{
+                maxWidth: '180px',
+                height: 'auto',
+              }}
+            />
+          </Box>
           {!isMobile && (
             <Box sx={{ display: 'flex', gap: 1 }}>
               {navigationLinks.map((link) => {
@@ -113,6 +137,7 @@ function AppLayout({ children }) {
                     color="inherit"
                     sx={{
                       textTransform: 'none',
+                      padding: '3px 10px',
                       fontSize: '1rem',
                       backgroundColor:
                         !isExternal && location.pathname === link.path

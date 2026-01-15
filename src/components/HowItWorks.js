@@ -19,7 +19,7 @@ function HowItWorks() {
       icon: <DescriptionIcon sx={{ fontSize: 48 }} />,
       title: 'Complete Your Intake Form',
       description:
-        'Share your running history, current fitness level, goals, and schedule availability. This helps us understand your unique situation and create a plan that fits your life.',
+        'Share your running history, current fitness level, goals, and schedule availability. This helps us understand your unique situation and create a plan that fits your life. Once we have received your intake form, we will set up a call to discuss your goals and create a personalized training plan.',
     },
     {
       icon: <AssignmentIcon sx={{ fontSize: 48 }} />,

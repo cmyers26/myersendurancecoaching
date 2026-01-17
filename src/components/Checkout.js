@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
+import SEO from './SEO';
 import {
   Container,
   Typography,
@@ -17,7 +18,7 @@ import { validateProductType } from '../lib/productValidation';
 function Checkout() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { selectedPlan, setSelectedPlan, setIsAuthenticated } = useAppContext();
+  const { selectedPlan, setSelectedPlan } = useAppContext();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
 
@@ -114,6 +115,7 @@ function Checkout() {
 
   return (
     <>
+      <SEO pageKey="checkout" />
       {/* Page Header */}
       <Box
         sx={{

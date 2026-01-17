@@ -8,10 +8,12 @@ import {
   Button,
 } from '@mui/material';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import SEO from './SEO';
 
 function CheckoutCancel() {
   return (
     <>
+      <SEO pageKey="checkoutCancel" />
       {/* Page Header */}
       <Box
         sx={{

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useAppContext } from '../context/AppContext';
+import SEO from './SEO';
 import {
   Container,
   Typography,
@@ -51,6 +52,7 @@ function AthleteDashboard() {
 
   return (
     <>
+      <SEO pageKey="dashboard" />
       {/* Page Header */}
       <Box
         sx={{

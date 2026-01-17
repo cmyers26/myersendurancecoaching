@@ -10,6 +10,7 @@ import {
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { productConfig } from '../config/productConfig';
 import { normalizeProductType } from '../lib/productValidation';
+import SEO from './SEO';
 
 function CheckoutSuccess() {
   const [searchParams] = useSearchParams();
@@ -24,6 +25,7 @@ function CheckoutSuccess() {
 
   return (
     <>
+      <SEO pageKey="checkoutSuccess" />
       {/* Page Header */}
       <Box
         sx={{

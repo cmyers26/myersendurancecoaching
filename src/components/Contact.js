@@ -10,6 +10,7 @@ import {
   Alert,
   CircularProgress,
 } from '@mui/material';
+import SEO from './SEO';
 
 function Contact() {
   const [formData, setFormData] = useState({
@@ -102,6 +103,7 @@ function Contact() {
 
   return (
     <>
+      <SEO pageKey="contact" />
       {/* Page Header */}
       <Box
         sx={{

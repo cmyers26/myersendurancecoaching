@@ -11,6 +11,7 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
+import SEO from './SEO';
 
 function HowItWorks() {
   const heroImageUrl = '/images/pexels-runffwpu-1571939.jpg';
@@ -43,6 +44,7 @@ function HowItWorks() {
 
   return (
     <>
+      <SEO pageKey="howItWorks" />
       {/* Page Header */}
       <Box
         sx={{

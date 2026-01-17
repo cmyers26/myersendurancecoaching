@@ -83,6 +83,15 @@ export default async function handler(
       });
     }
 
+    // Log webhook secret info for debugging (without exposing the full secret)
+    console.log('Webhook verification info:', {
+      hasSecret: !!webhookSecret,
+      secretPrefix: webhookSecret ? webhookSecret.substring(0, 10) : 'missing',
+      secretLength: webhookSecret?.length || 0,
+      signaturePresent: !!signature,
+      rawBodyLength: rawBody.length,
+    });
+
     // Verify webhook signature
     let event: Stripe.Event;
     try {
@@ -93,9 +102,18 @@ export default async function handler(
       );
     } catch (err: any) {
       console.error('Webhook signature verification failed:', err.message);
+      console.error('Debug info:', {
+        errorType: err.type,
+        errorMessage: err.message,
+        hasWebhookSecret: !!webhookSecret,
+        webhookSecretPrefix: webhookSecret ? webhookSecret.substring(0, 10) : 'missing',
+        // Note: If this is a live mode webhook but you're using a test secret,
+        // you'll need to update STRIPE_WEBHOOK_SECRET to the live mode secret
+      });
       return res.status(400).json({
         error: 'Signature verification failed',
-        message: err.message
+        message: err.message,
+        hint: 'Verify that STRIPE_WEBHOOK_SECRET matches the webhook mode (test vs live) in your Stripe Dashboard.'
       });
     }
 

@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { supabase } from '../lib/supabase';
 import AddOnIntakeForm from './AddOnIntakeForm';
 import { productConfig } from '../config/productConfig';
+import SEO from './SEO';
 import {
   Container,
   Typography,
@@ -908,6 +909,7 @@ function IntakeForm() {
   // Render full coaching intake form
   return (
     <>
+      <SEO pageKey="intake" />
       {/* Page Header */}
       <Box
         sx={{

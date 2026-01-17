@@ -10,6 +10,7 @@ import {
   CardContent,
   Paper,
 } from '@mui/material';
+import SEO from './SEO';
 
 function Home() {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ function Home() {
 
   return (
     <>
+      <SEO pageKey="home" />
       {/* Hero Section */}
       <Box
         sx={{

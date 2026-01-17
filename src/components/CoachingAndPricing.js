@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAppContext } from '../context/AppContext';
 import { productConfig } from '../config/productConfig';
 import { productFeatures } from '../config/productFeatures';
@@ -19,6 +19,7 @@ import {
   ListItemText,
 } from '@mui/material';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import SEO from './SEO';
 
 // Product keys organized by section (using old format for handlePlanSelect compatibility)
 const PDF_PLANS = ['pdf-5k', 'pdf-10k', 'pdf-half', 'pdf-marathon'];
@@ -27,8 +28,12 @@ const ADD_ONS = ['addon-strength', 'addon-race-strategy'];
 
 function CoachingAndPricing() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { setSelectedPlan } = useAppContext();
   const heroImageUrl = '/images/pexels-bohlemedia-2803160.jpg';
+  
+  // Determine page key based on route
+  const pageKey = location.pathname === '/coaching' ? 'coaching' : 'pricing';
 
   const handlePlanSelect = (planName) => {
     setSelectedPlan(planName);
@@ -51,6 +56,8 @@ function CoachingAndPricing() {
   const renderProductCard = (oldKey, options = {}) => {
     const product = getProductData(oldKey);
     const features = getProductFeatures(oldKey);
+
+    console.log(product);
     
     if (!product) return null;
 
@@ -170,6 +177,7 @@ function CoachingAndPricing() {
   };
   return (
     <>
+      <SEO pageKey={pageKey} />
       {/* Page Header */}
       <Box
         sx={{

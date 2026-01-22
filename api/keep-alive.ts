@@ -14,7 +14,7 @@ export default async function handler(
   try {
     // Minimal, harmless query — does NOT create data
     const { error } = await supabase
-      .from('intake_forms') // <-- use any existing table
+      .from('intakes') // <-- use any existing table
       .select('id')
       .limit(1)
 
